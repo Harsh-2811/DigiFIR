@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% block ecss%} {%  endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+    <style>
+        
+        .bg-color {
+            background-color: #283990;
+        }
+         body {
+             background-color: #F7F7FC;
+             font-family:'Noto Sans TC', sans-serif;
+        }
+           
+         {% block css%}
+
+            {% endblock%}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body >
+
+    <nav class="navbar navbar-expand-md bg-color navbar-dark">
+        <a class="navbar-brand" href="#" style="margin-left: 30px;">DigiFIR</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto" style="margin-right:  30px;">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home <i class="fa fa-home" aria-hidden="true"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/contactus/">Contact Us <i class="fa fa-envelope"></i></a>
+                </li>
+                {% if victim or user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><span class="links">Register FIR <i class="fa fa-drivers-license-o" ></i> </span> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard_user/"><span class="links">My Profile <i class="fa fa-user" ></i> </span> </a>
+                    </li>
+                    {% endif %}
+                    {% if sho or user.is_superuser%}
+                        <li class="nav-item">
+                        <a class="nav-link" href="/dashboard_sho/"><span class="links">Police Dashboard <i class="fa fa-user" ></i> </span> </a>
+                    </li>
+                    {% endif %}
+                {% if user.is_authenticated %}
+                
+                <li class="nav-item dropdown">
+
+                      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        <span class="links">{{user.username}} <i class="fa fa-sign-in" style="color: #283990;" aria-hidden="true"></i></span>
+                      </a>
+
+
+                      <div class="dropdown-menu" style="background:none;left:-25px;min-width:8rem;">
+                        <a class="dropdown-item" href="/logout/"><span class="links">Sign Out <i class="fa fa-sign-out" style="color: #283990;" aria-hidden="true"></i></span></a>
+
+                      </div>
+                    </li>
+                {% else %}
+               
+                <li class="nav-item">
+                    <a class="nav-link active" href="/signin/">Sign In <i class="fa fa-sign-in" ></i> </a>
+                </li>
+                {% endif %}
+                
+                
+            </ul>
+        </div>
+    </nav>
+
+    {% block body%} {% endblock%}
+    {% block escript%} {% endblock%}
+    <script>
+        {% block script %} {% endblock%}
+    </script>
+</body>
+
+</html>

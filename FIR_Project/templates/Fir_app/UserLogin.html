@@ -1,0 +1,110 @@
+{% extends 'Fir_app/basic.html' %}
+{% block title %} UserLogIn {% endblock %}
+{% block ecss %}
+    <meta name="viewport" content="width=device-width" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+{% endblock %}
+    {% block css %}
+        body {
+            background-color: #F7F7FC;
+             font-family:'Noto Sans TC', sans-serif;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .btn {
+            border: 2px solid #283990;
+            color: #283990;
+        }
+
+        .btn:hover {
+            color: white;
+            background-color: #283990;
+        }
+
+        a:hover {
+            color: #283990;
+            text-decoration: underline;
+        }
+
+       {% endblock %}
+
+        
+    
+
+{% block body %}
+   {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <section class="pt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="display-3" style=" color: #283990">User Login</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="pt-3">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="card w-50">
+                    <div class="card-body">
+                        <form action="/loginprocess/" method="post"> {% csrf_token %}
+                            <div class="form-group">
+                                <label for="UserName">UserName:</label>
+                                <input type="text" class="form-control" id="UserName"  name="uname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="LoginPass">Password:</label>
+                                <input type="password" class="form-control" id="LoginPass" name="pass" required>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn ">
+                                    <h5 style="margin:auto">Log in</h5>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="text-center">
+                            <h6>Haven't account yet?...<a href="/signup">Please register first</a></h6>
+                            <h6><a href="/forgetpassword">Forget Password ?</a></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  {% endblock %}
+

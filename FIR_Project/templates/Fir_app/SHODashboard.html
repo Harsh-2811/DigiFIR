@@ -1,0 +1,1136 @@
+{% extends 'Fir_app/basic.html' %}
+{% block title %} SHO DashBoard {% endblock %}
+{% block ecss %}
+    <meta name="viewport" content="width=device-width" />
+    <title>UserDashBoard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+    {% block css %}
+        body {
+            background-color: #F7F7FC;
+        }
+        .card:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+        .btn {
+            color: white;
+            background-color: #283990;
+            font-size: 18px;
+            width: 100%
+        }
+
+            .btn:hover {
+                border: 2px solid #283990;
+                color: #283990;
+                background-color: white;
+            }
+        thead {
+            background-color: #283990;
+            color : white
+        }
+
+        /* The message box is shown when the user clicks on the password field */
+        #message, #cmessage{
+            display: none;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f1f1f1;
+            color: #000;
+            position: relative;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        #message p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+
+        #cmessage p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+        
+        /* Add a green text color and a checkmark when the requirements are right */
+        .valid {
+            color: green;
+        }
+
+        .valid:before {
+            position: relative;
+            left: -35px;
+            content: "✔";
+        }
+
+        /* Add a red text color and an "x" when the requirements are wrong */
+        .invalid {
+            color: red;
+        }
+
+        .invalid:before {
+            position: relative;
+            left: -35px;
+            content: "✖";
+        }
+{% endblock %}
+
+
+
+
+{% block body %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <section class="mt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <button type="button" class="btn" id="btnuserprofile">Add police</button>
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn" id="btnuserFIR">FIRs</button>
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn" id="btnPolice">Police</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-3">
+        <div class="container">
+            <div class="collapse" id="userprofile">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <form onsubmit="return checksubmit()" method="post" action="/savepolice/">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="fname">First Name</label>
+                                        <input type="text" class="form-control" id="fname" name="fname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="mname">Middle Name</label>
+                                        <input type="text" class="form-control" id="mname" name="mname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="lname">Last Name</label>
+                                        <input type="text" class="form-control" id="lname" name="lname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Date of birth</label>
+                                        <input type="date" class="form-control" id="dob" name="dob" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Gender</label>
+                                        <div class="mt-1">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="male" name="radiogender" id="radiomale" required>Male
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiogender" value="female" id="radiofemale">Female
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiogender"  value="transgender" id="radiotransgender">Transgender
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="mono">Mobile number</label>
+                                        <input type="number" class="form-control" id="mono" name="mobileno" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="passno">Passport number</label>
+                                        <input type="number" class="form-control" id="passno" name="passportno">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="aadharno">Aadharcard number</label>
+                                        <input type="number" class="form-control" id="aadharno" name="aadharno" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="username">UserName</label>
+                                        <input type="text" class="form-control" id="username" name="uname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="emailid">Email id</label>
+                                        <input type="email" class="form-control" id="emailid" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="pass">Password</label>
+                                        <input type="password" class="form-control" id="pass" name="password" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="confpass">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confpass" required>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn w-50"><h5 style="margin:auto">Save</h5></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="userFIR">
+                <div class="card w-100 mt-3">
+                    <div class="card-body">
+                        <table id="tbluserFIR" class="table cell-border compact stripe hover">
+                              <thead>
+                                <tr>
+                                    <th>FIR no</th>
+                                    <th>User Id </th>
+                                    <th>Station Id</th>
+                                    <th>Officer Id </th>
+                                    <th>IPC</th>
+
+                                    <th>Crime Date</th>
+                                    <th>Crime Time</th>
+                                    <th>Report Date</th>
+                                    <th>Report Time</th>
+                                    <th>Diary No</th>
+                                    <th>Crime Location</th>
+                                    <th>Suspected People</th>
+                                    <th>Reason For delaying Fir</th>
+                                    <th>Stolen Things</th>
+                                    <th>Stolen Amount</th>
+                                    <th>Death Report No</th>
+                                    <th>Steps taken</th>
+                                    <th>Extra Details</th>
+                                    <th>Court Send Date</th>
+
+
+                                </tr>
+
+                            </thead>
+                            <tbody id="accptedFirbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="Police">
+                <div class="card w-100 mt-3">
+                    <div class="card-body">
+                        <table id="tblPolice" class="table cell-border compact stripe hover">
+                            <thead>
+                             <tr>
+                                     <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile No</th>
+                                    <th>User Name</th>
+                                    <th>Birth Date</th>
+                                    <th>Aadhar No</th>
+                                    <th>Passport No</th>
+                             </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for p in polices %}
+                                <tr>
+                                    <td>{{p.firstname}} {{p.lastname}}</td>
+                                    <td>{{p.user.email}}</td>
+                                    <td>{{p.mobile_no}}</td>
+                                    <td>{{p.user.username}}</td>
+                                    <td>{{p.dob}}</td>
+                                    <td>{{p.aadhar_no}}</td>
+                                    <td>{{p.passport_no}}</td>
+
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        $(document).ready(function () {
+            $("#userFIR").collapse('show');
+
+            $("#btnuserprofile").click(function () {
+                $("#userprofile").collapse('show');
+                $("#userFIR").collapse('hide');
+                $("#Police").collapse('hide');
+            });
+            $("#btnuserFIR").click(function () {
+                $("#userprofile").collapse('hide');
+                $("#userFIR").collapse('show');
+                $("#Police").collapse('hide');
+            });
+            $("#btnPolice").click(function () {
+                $("#userprofile").collapse('hide');
+                $("#userFIR").collapse('hide');
+                $("#Police").collapse('show');
+            });
+
+
+            $('#tblPolice').DataTable({
+
+            });
+
+        });
+    </script>
+
+
+  {% endblock %}
+
+ {% block escript %}
+   
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.0/web3.min.js"></script>
+ <script>
+     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+
+     web3.eth.defaultAccount = web3.eth.accounts[0];
+     var abi=[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			}
+		],
+		"name": "addCourtSendDate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR",
+				"name": "_fir",
+				"type": "tuple"
+			}
+		],
+		"name": "addFir",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_ipc",
+				"type": "string"
+			}
+		],
+		"name": "addIpc",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_steps",
+				"type": "string"
+			}
+		],
+		"name": "addStepsTaken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "officer_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getPoliceFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "station_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getStationFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_user_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getUserFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getfir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+     var CoursetroContract = new web3.eth.Contract(abi,'0x237f0410770a95301fDa7dF8a588259Ee65Fa344')
+
+    var user_id1={{user.id}};
+
+    var answer={}
+
+            CoursetroContract.methods.getStationFir(user_id1).call().then(function(answer){
+                console.log(answer);
+                console.log(answer.length);
+                for(var i =0 ; i< answer.length ; i++ )
+                {
+                    console.log(answer[i]);
+                    var row=document.createElement("tr");
+                    var fir_id=document.createElement("td");
+                    fir_id.innerHTML  =   answer[i].fir_id;
+                    row.appendChild(fir_id)
+
+                    var user_id = document.createElement("td");
+                    user_id.innerHTML = answer[i].user_id
+                    row.appendChild(user_id)
+                    var station_id = document.createElement("td");
+                    station_id.innerHTML = answer[i].station_id
+                    row.appendChild(station_id)
+                    var officer_id = document.createElement("td");
+                    officer_id.innerHTML = answer[i].officer_id
+                    row.appendChild(officer_id)
+
+                    var ipc = document.createElement("td");
+                    ipc.innerHTML = answer[i].ipc
+                    row.appendChild(ipc)
+                    var crime_date = document.createElement("td");
+                    crime_date.innerHTML = answer[i].crime_date
+                    row.appendChild(crime_date)
+                    var crime_time = document.createElement("td");
+                    crime_time.innerHTML = answer[i].crime_time
+                    row.appendChild(crime_time)
+                    var report_date = document.createElement("td");
+                    report_date.innerHTML = answer[i].report_date
+                    row.appendChild(report_date)
+                    var report_time = document.createElement("td");
+                    report_time.innerHTML = answer[i].report_time
+                    row.appendChild(report_time)
+
+                    var police_station_diary_no = document.createElement("td");
+                    police_station_diary_no.innerHTML = answer[i].police_station_diary_no
+                    row.appendChild(police_station_diary_no)
+                    var crime_location = document.createElement("td");
+                    crime_location.innerHTML = answer[i].crime_location
+                    row.appendChild(crime_location)
+                    var suspected_people = document.createElement("td");
+                    suspected_people.innerHTML = answer[i].suspected_people
+                    row.appendChild(suspected_people)
+
+
+                    var reasone_delay_fir = document.createElement("td");
+                    reasone_delay_fir.innerHTML = answer[i].reasone_delay_fir
+                    row.appendChild(reasone_delay_fir)
+                    var stolen_things = document.createElement("td");
+                    stolen_things.innerHTML = answer[i].stolen_things
+                    row.appendChild(stolen_things)
+                    var stolen_amount = document.createElement("td");
+                    stolen_amount.innerHTML = answer[i].stolen_amount
+                    row.appendChild(stolen_amount)
+
+
+                    var death_report_no = document.createElement("td");
+                    death_report_no.innerHTML =answer[i].death_report_no
+                    row.appendChild(death_report_no)
+                    var steps_taken = document.createElement("td");
+                    steps_taken.innerHTML = answer[i].steps_taken
+                    row.appendChild(steps_taken)
+                    var details = document.createElement("td");
+                    details.innerHTML = answer[i].details
+                    row.appendChild(details)
+                    var court_send_date = document.createElement("td");
+                    court_send_date.innerHTML =answer[i].court_send_date
+                    row.appendChild(court_send_date)
+                    $("#accptedFirbody").append(row);
+                }
+                 $('#tbluserFIR').DataTable({
+                "scrollX": true,
+
+            });
+            })
+
+</script>
+
+{% endblock %}
+{% block script %}
+
+    
+    $("#pass").blur(function() {
+        var password = $("#pass").val();
+
+        regx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
+        if (regx.test(password) == false)
+            swal("Invalid Password\nPassword Must Contain \n1) At least One Capital Letter\n2) At least on Digit \n3) Small Letters")
+    })
+
+    $("#confpass").blur(function() {
+        var password = $("#pass").val();
+        var confpassword = $("#confpass").val();
+        if (confpassword != password) {
+            swal("Password and Confirm Password are not matching")
+        }
+    })
+
+    $("#mono").blur(function() {
+        var regxPhone = /^[7-9]\d{9}$/;
+        var mobileno = $(this).val();
+        if (regxPhone.test(mobileno) == false) {
+            swal("Invalid Mobile No");
+        }
+    })
+
+
+    
+    var application = angular.module('myapp', []);
+    application.controller('states', function($scope) {
+        $scope.sts = [{
+            name: 'Select State'
+        }, {
+            name: 'Gujarat'
+        }, {
+            name: 'Maharashtra'
+        }]
+    });
+
+    function checksubmit() {
+        var password = $("#pass").val();
+
+        regx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
+        if (regx.test(password) == false)
+          {  swal("Invalid Password\nPassword Must Contain \n1) At least One Capital Letter\n2) At least on Digit \n3) Small Letters")
+            return false;
+          }
+        var confpassword = $("#confpass").val();
+        if (confpassword != password) {
+            swal("Password and Confirm Password are not matching")
+            return false;
+        }
+
+        var regxPhone = /^[7-9]\d{9}$/;
+        var mobileno = $("#mono").val();
+        if (regxPhone.test(mobileno) == false) {
+            swal("Invalid Mobile No");
+            return false
+        }
+        
+       
+        
+        return true;
+    }
+{% endblock %}

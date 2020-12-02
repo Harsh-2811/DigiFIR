@@ -1,0 +1,335 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <style>
+        body{
+            margin:0px;
+            padding:0px;
+            font-family:'Noto Sans TC', sans-serif;
+            background-color:#F7F7FC;
+        }
+        .mynav {
+            background: none;
+        }
+
+        .header {
+            background-image: linear-gradient(-120deg, rgba(255, 255, 255, 0.9) 50%, transparent 50%), url('/static/images/FIR.jpg');
+            height: 70vh;
+            background-size: 100% 100%;
+            font-family: 'Noto Sans TC', sans-serif;
+            background-attachment:fixed;
+        }
+
+        .links {
+            color: #283990;
+            font-size: 15px;
+        }
+
+        .bg-dark {
+            background-color: transparent !important;
+        }
+
+        .links:hover {
+
+            display: inline-block;
+            border-bottom: 2px solid black;
+            padding-bottom: 2px;
+        }
+
+        .main-header h2 {
+
+            position: absolute;
+            top: 30%;
+            right: 2%;
+
+            color: #283990;
+        }
+
+        .main-header p {
+
+            position: absolute;
+            top: 80%;
+            font-weight:bold;
+            right: 3%;
+            font-size: 20px;
+            margin-top: 36px;
+
+        }
+
+        .name {
+
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0% {
+                color: red;
+            }
+
+            50% {
+                color: blue;
+            }
+
+            100% {
+                color: green;
+            }
+        }
+
+        .our-services {
+            text-align: center;
+            margin-top: 50px;
+            color: #283990;
+            font-size: 50px;
+
+        }
+
+        .services-content {
+            margin-top: 40px;
+        }
+
+        .chatcontent {
+            padding-left: 50px;
+        }
+
+        .aboutus-content
+        {
+            font-weight:bold;
+            font-size:20px;
+        }
+
+        .aboutus{
+            text-align: center;
+            margin-top: 50px;
+            color: #283990;
+            font-size: 50px;
+        }
+        .navbar-brand
+            {
+                width: 90px;margin-left: 100px;
+            }
+        .logo
+        {
+            width:200px; 
+        }
+        @media only screen and (max-width: 770px) {
+          .main-header h2 {
+
+            position: absolute;
+            top: 30%;
+            right: 2%;
+            font-size:14px;
+            color: #283990;
+            }
+            .main-header p {
+
+            position: absolute;
+            top: 80%;
+            font-weight:bold;
+            right: 3%;
+            font-size: 8px;
+            margin-top: 36px;
+
+             }
+            .navbar-brand
+            {
+                margin-left: 60px;
+            }
+            .logo
+            {
+                width:170px; 
+            }
+        }
+        @media only screen and (max-width: 760px) {
+            .navbar-nav
+            {
+                float:right;
+            }
+        }
+        @media only screen and (max-width: 900px) {
+            .logo{
+                width: 100px;
+            }
+        }
+          @media only screen and (max-width: 1160px) {
+          .main-header h2 {
+
+            position: absolute;
+            top: 30%;
+            right: 2%;
+            font-size:25px;
+            color: #283990;
+            }
+            .main-header p {
+
+            position: absolute;
+            top: 80%;
+            font-weight:bold;
+            right: 3%;
+            font-size: 10px;
+            margin-top: 36px;
+
+             }
+           
+        }
+         @media only screen and (min-width: 1400px) {
+             .links {
+            color: #283990;
+            font-size: 25px;
+        }
+          .main-header h2 {
+
+            position: absolute;
+            top: 30%;
+            right: 2%;
+            font-size:45px;
+            color: #283990;
+            }
+            .main-header p {
+
+            position: absolute;
+            top: 80%;
+            font-weight:bold;
+            right: 3%;
+            font-size: 30px;
+            margin-top: 56px;
+
+             }
+            .navbar-brand
+            {
+                margin-left: 60px;
+            }
+            .logo
+            {
+                width:170px; 
+            }
+        }
+    </style>
+</head>
+
+<body>
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <div class="header">
+        <nav class="navbar mynav navbar-expand-md bg-dark navbar-dark animate__animated animate__fadeInDown">
+            <a class="navbar-brand" href="#"><img src="/static/images/logo.png" class="rounded img-responsive logo" alt="Logo"></a>
+            <button class="navbar-toggler animate__animated animate__fadeInRight" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <i class="fa fa-bars" style="color: black;font-size: 24px;" aria-hidden="true"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar" style="margin-top:-50px;">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><span class="links">Home <i class="fa fa-home" style="color: #283990;" aria-hidden="true"></i> </span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contactus/"><span class="links">Contact Us <i class="fa fa-envelope" style="color: #283990;"></i> </span> </a>
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+
+                    {% if victim or user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/firregistration/"><span class="links">Register FIR <i class="fa fa-drivers-license-o" style="color: #283990;"></i> </span> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard_user/"><span class="links">My Profile <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
+                    </li>
+                    {% endif %}
+                    {% if sho or user.is_superuser%}
+                        <li class="nav-item">
+                        <a class="nav-link" href="/dashboard_sho/"><span class="links">Sho Dashboard <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
+                    </li>
+                    {% endif %}
+                    {% if police or user.is_superuser%}
+                        <li class="nav-item">
+                        <a class="nav-link" href="/dashboard_police/"><span class="links">Police Dashboard <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
+                    </li>
+                    {% endif %}
+
+
+                    <li class="nav-item dropdown">
+
+                      <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        <span class="links">{{user.username}} <i class="fa fa-sign-in" style="color: #283990;" aria-hidden="true"></i></span>
+                      </a>
+
+
+                      <div class="dropdown-menu" style="background:none;left:-25px;min-width:8rem;">
+                        <a class="dropdown-item" href="logout/"><span class="links">Sign Out <i class="fa fa-sign-out" style="color: #283990;" aria-hidden="true"></i></span></a>
+
+                      </div>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signin/"><span class="links">Sign In <i class="fa fa-sign-in" style="color: #283990;" aria-hidden="true"></i></span> </a>
+                    </li>
+                     {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <div class="main-header  ">
+
+            <div class="col-xl-12  col-lg-10 col-md-10 col-sm-10 col-xs-10">
+            <h2 class="animate__animated animate__fadeInRight">Welcome to <span class="name">DigiFIR</span> - A Virtual Cope </h2>
+            <p class="animate__animated animate__fadeInRight">- A Platform to Register your FIR at your place without <br>visiting police station </p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div>
+            <h1 class="our-services"> <span> Our Services</span> </h1>
+        </div>
+        <div class="services-content">
+
+
+            <div class="row container" >
+                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 chatimage animate__animated animate__fadeInLeft">
+                    <img class="rounded" src="/static/images/chatbot.png" style="width:60%;margin-top:-30px;">
+                </div>
+                <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 chatcontent animate__animated animate__fadeInRight">
+                    <h1 style="color:#283990 "> FIR Registration Using AI ChatBot</h1>
+                    <p style="font-size: 20px;padding: 20px; font-weight: bold;"> We are Using AI Chatbot which act as virtual cope and ask Questions to Victim according to FIR Rules and Terms. </p>
+                </div>
+            </div>
+
+            <div class="row container" style="margin-top: 60px;">
+                <div class="col-xl-8 col-lg-8 col-md-6 col-sm-6 chatcontent animate__animated animate__fadeInLeft">
+                    <h1 style="color:#283990 "> Securly Save FIR Data</h1>
+                    <p style="font-size: 20px;padding: 20px;font-weight: bold;"> Our Website Stores User's Personal and FIR Data Securely without any harm </p>
+                </div>
+                <div class="col-xl-4  col-lg-4 col-md-6 col-sm-6 chatimage animate__animated animate__fadeInRight">
+                    <img class="rounded" src="/static/images/savedata.png" style="width:110%;margin-top:-60px;">
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+    <div style="background-image:url('static/images/aboutus.jpg');background-size:cover;padding:30px;">
+        <div class="container col-xl-12  col-lg-12 col-md-6 col-sm-6 col-xs-3">
+            <h1 class="aboutus"> <span> About Us </span> </h1>
+            <p class="aboutus-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Tortor condimentum lacinia quis vel eros donec ac odio tempor. Faucibus purus in massa tempor nec feugiat nisl pretium fusce. Tellus id interdum velit laoreet id donec ultrices.</p>
+        </div>
+    </div>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

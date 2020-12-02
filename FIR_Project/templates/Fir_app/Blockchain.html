@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+       <input type="submit" id="button1" value="Put Data">
+        <input type="submit" id="button2" value="Gett Data">
+    <p id="fir_id"></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.0/web3.min.js"></script>
+<script  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+   <script>
+     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+
+     web3.eth.defaultAccount = web3.eth.accounts[0];
+     var abi=[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			}
+		],
+		"name": "addCourtSendDate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR",
+				"name": "_fir",
+				"type": "tuple"
+			}
+		],
+		"name": "addFir",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_ipc",
+				"type": "string"
+			}
+		],
+		"name": "addIpc",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_steps",
+				"type": "string"
+			}
+		],
+		"name": "addStepsTaken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "station_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getStationFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_user_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getUserFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getfir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+     var CoursetroContract = new web3.eth.Contract(abi,'0xB579Cc142c78479c1E13FFcD18Da8F3d2b6E7cc9',)
+
+   
+
+     $("#button1").click(function() {
+            web3.eth.getAccounts().then(function(accounts){
+                var acc = accounts[0];
+                var fir = {
+                    fir_id :"2",
+                    user_id :"1",
+                    station_id :"1",
+                    officer_id :"1",
+                    ipc:['ndns','dsjdfjd'],
+                    crime_date:"2020-09-19",
+                    crime_time:"8:00",
+                    report_date:"2020-09-19",
+                    report_time:"9:00",
+                    police_station_diary_no:"11",
+                    crime_location:"Station",
+                    suspected_people:["ABC"],
+                    reasone_delay_fir:"sdsf",
+                    stolen_things:"dsfdsf",
+                    stolen_ammount:"2000",
+                    death_report_no:"32",
+                    steps_taken:["dsfsf"],
+                    details:"dfsdf",
+                    court_send_date:"2020-2-24"
+                }
+                return CoursetroContract.methods.addFir(fir).send({from:acc,gasLimit:"600000"});
+            }).then(function(tx){
+                console.log(tx)
+            }).catch(function(tx){
+                console.log(tx)
+            })
+
+        });
+        $("#button2").click(function() {
+            var answer={}
+            CoursetroContract.methods.getUserFir(1).call().then(function(answer){
+           $("#fir_id").html(answer[2].fir_id);
+     })
+        });
+</script>
+
+</body>
+</html>

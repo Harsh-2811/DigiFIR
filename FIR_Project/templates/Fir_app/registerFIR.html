@@ -1,0 +1,354 @@
+{% extends 'Fir_app/basic.html' %}
+
+{% block title %} Register Your Fir {% endblock %}
+
+{% block ecss %}
+    <meta name="viewport" content="width=device-width" />
+    <title>UserLogIn</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+    <style>
+        body {
+            background-color: #F7F7FC;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .btn {
+            border: 2px solid #283990;
+            color: #283990;
+        }
+
+        .btn:hover {
+            color: white;
+            background-color: #283990;
+        }
+
+        a:hover {
+            color: #283990;
+            text-decoration: underline;
+        }
+
+        label {
+            margin-top: 4%;
+            font-size: 18px;
+        }
+    </style>
+{% endblock %}
+{% block body%}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <section class="section mt-3 p-2" style="background-color: #283990;color: #fff;">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="h4 mt-3">Welcome , {{user}}</div>
+                </div>
+                <div class="col-6 text-right">
+                    <div class="h4 mt-3">Register FIR </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="p-3">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="card w-100 ">
+                    <div class="card-header text-center">
+                        <marquee style="color:red">As per section 182 of Indian Penal Code (IPC) - If any citizen report a fake FIR then he/she would be jailed for 6-12 months.</marquee>
+                    </div>
+                    <div class="card-body">
+                        <form action="/firregistration/" method="post">{% csrf_token %}
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_u_id">User ID</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input type="text" class="form-control" id="fir_u_id" disabled value="{{user.id}}"
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_state">Select State</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <select class="form-control" id="fir_state" name="state" required>
+                                            <option value="">Select State</option>
+                                            {% for st in states %}
+                                                <option value="{{st.id}}">{{st.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_city">Select City</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <select class="form-control" id="fir_city" name="city" required>
+                                            <option value="">Select City</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_police_station">Select Police Station</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <select class="form-control" id="fir_police_station" name="police_station" required>
+                                            <option value="">Select Police Station</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_sho_name">SHO Officer Name</label>
+                                    </div>
+
+                                        <input type="hidden" class="form-control" id="fir_sho_name_hidden" name="sho_name" required>
+
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input type="text" class="form-control" id="fir_sho_name"  disabled
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_crime_date">Crime Date</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input type="date" class="form-control" id="fir_crime_date" name="crime_date" required>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_crime_time">Crime Time</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input type="time" class="form-control" id="fir_crime_time" name="crime_time" required>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_report_date">Report Date</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input type="date" class="form-control" value="{{today_date|date:'Y-m-d'}}" id="fir_report_date" disabled required>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_report_time">Report Time</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <input type="time" class="form-control" id="fir_report_time"  value="{{current_time|time:'H:i'}}" disabled required>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_crime_location">Crime Location</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <textarea class="form-control" rows="3" id="fir_crime_location"
+                                            placeholder="Enter full address of crime." name="crime_loc" required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_suspected_people">Suspected People</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <textarea class="form-control" rows="3" id="fir_suspected_people"
+                                            placeholder="enter full name of suspected People separated by comma(,)." name="suspected_people"
+                                            required></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_reason_delay">Reason for Delay FIR</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <textarea class="form-control" rows="3" id="fir_reason_delay" required
+                                            placeholder="Enter resaone for delay FIR." name="reason_for_fir_delay"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_stolen_things">Stolen Things</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <textarea class="form-control" rows="2" id="fir_stolen_things"
+                                            placeholder="Enter all stolen things separated by comma(,)." name="stolen_things"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_stolen_amount">Stolen Amount</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <textarea class="form-control" rows="1" id="fir_stolen_amount"
+                                            name="stolen_amt" placeholder="Enter amount of stolen money in rupees."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-lg-2">
+                                    <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                                        <label for="fir_extra_points">Additional Information</label>
+                                    </div>
+                                    <div class="col-lg-6 col-md-9 col-sm-12">
+                                        <textarea class="form-control" rows="3" id="fir_extra_points"
+                                           name="extra_points" placeholder="Tell more about your FIR."></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group text-center mt-2">
+                                    <button type="submit" class="btn ">
+                                        <h5 style="margin:auto">Submit</h5>
+                                    </button>
+                                </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+
+
+{% block script%}
+
+$( "#fir_police_station" ).change(function() {
+
+ var station=$("#fir_police_station").val();
+
+   datatopass={"station":station}
+     $.ajax({
+  type: "GET",
+  url: "/fetchsho",
+  data: datatopass,
+  success: function(msg){
+      msg=JSON.parse(msg);
+      var resp= msg["sho"]
+      $("#fir_sho_name").val(resp['name']);
+      $("#fir_sho_name_hidden").val(resp['name']);
+
+
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+
+
+});
+});
+
+
+$( "#fir_city" ).change(function() {
+   var ct=$("#fir_city").val();
+   datatopass={"city":ct}
+    $('#fir_police_station').empty()
+   $.ajax({
+  type: "GET",
+  url: "/fetchstation",
+  data: datatopass,
+  success: function(msg){
+      msg=JSON.parse(msg);
+      var resp= msg["stations"]
+      console.log(resp);
+               var o1=new Option();
+     $(o1).html("Select Police Station");
+        $(o1).val("");
+        $("#fir_police_station").append(o1);
+      for(var i=0;i <= resp.length;i++)
+      {
+        var o = new Option();
+        /// jquerify the DOM object 'o' so we can use the html method
+        $(o).html(resp[i]["name"]);
+        $(o).val(resp[i]["id"]);
+        $("#fir_police_station").append(o);
+      }
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+});
+});
+
+
+$( "#fir_state" ).change(function() {
+
+   var st=$("#fir_state").val();
+    datatopass={"state":st}
+
+    $('#fir_city')
+    .empty()
+
+   $.ajax({
+  type: "GET",
+  url: "/fetchcity",
+  data: datatopass,
+  success: function(msg){
+      msg=JSON.parse(msg);
+      var resp= msg["cities"]
+      console.log(resp);
+             var o1=new Option();
+     $(o1).html("Select City");
+        $(o1).val("");
+        $("#fir_city").append(o1);
+      for(var i=0;i <= resp.length;i++)
+      {
+        var o = new Option();
+        /// jquerify the DOM object 'o' so we can use the html method
+        $(o).html(resp[i]["name"]);
+        $(o).val(resp[i]["id"]);
+        $("#fir_city").append(o);
+      }
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+});
+});
+
+
+
+
+
+
+{% endblock %}

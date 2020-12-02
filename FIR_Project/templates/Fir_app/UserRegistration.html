@@ -1,0 +1,398 @@
+{% extends 'Fir_app/basic.html' %}
+{% block title %} User Registration {% endblock %}
+{% block ecss %}
+    <meta name="viewport" content="width=device-width" />
+    <title>UserRegistration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+ {% endblock %}
+    {% block css %}
+        body {
+            background-color: #F7F7FC;
+             font-family:'Noto Sans TC', sans-serif;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .btn {
+            border: 2px solid #283990;
+            color: #283990;
+        }
+
+        .btn:hover {
+            color: white;
+            background-color: #283990;
+        }
+
+        a:hover {
+            color: #283990;
+            text-decoration: underline;
+        }
+
+        /* The message box is shown when the user clicks on the password field */
+        #message,
+        #cmessage,
+        #mmessage {
+            display: none;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f1f1f1;
+            color: #000;
+            position: relative;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        #message p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+
+        #cmessage p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+
+        #mmessage p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+
+        /* Add a green text color and a checkmark when the requirements are right */
+        .valid {
+            color: green;
+        }
+
+        .valid:before {
+            position: relative;
+            left: -35px;
+            content: "✔";
+        }
+
+        /* Add a red text color and an "x" when the requirements are wrong */
+        .invalid {
+            color: red;
+        }
+
+        .invalid:before {
+            position: relative;
+            left: -35px;
+            content: "✖";
+        }
+
+      {% endblock %}
+
+        
+    
+
+{% block body %}
+
+
+
+    <section class="pt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="display-3" style=" color: #283990">User Registration</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="pt-3">
+        <div class="container" >
+            <div class="row d-flex justify-content-center">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <form action="" onsubmit="return checksubmit()" enctype="multipart/form-data" method="post">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="fname">First Name</label>
+                                        <input type="text" class="form-control" id="fname" name="fname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="mname">Middle Name</label>
+                                        <input type="text" class="form-control" id="mname" name="mname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="lname">Last Name</label>
+                                        <input type="text" class="form-control" id="lname" name="lname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Date of birth</label>
+                                        <input type="date" class="form-control" id="dob" required name="dob">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Gender</label>
+                                        <div class="mt-1">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="male" name="radiogender" id="radiomale" required>Male
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiogender" value="female" id="radiofemale">Female
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiogender" value="transgender" id="radiotransgender">Transgender
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Meritial Status</label>
+                                        <div class="mt-1">
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiomaritalstatus" value="single" id="radiosingle" required>Single
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiomaritalstatus" value="married" id="radiomarried">Married
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiomaritalstatus" value="divorced" id="radiodivorced">Divorced
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <textarea class="form-control" rows="3" id="address" name="address" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="ddlstate">State</label>
+                                        <select class="form-control" id="ddlstate" name="state" required>
+                                            <option value="">Select State</option>
+                                            {% for st in states %}
+                                                <option value="{{st.id}}">{{st.name}}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="ddlcity">City</label>
+                                        <select class="form-control" id="ddlcity" name="city" required>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="pincode">Pincode</label>
+                                        <input type="number" class="form-control" id="pincode"  name="pincode" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="mono">Mobile number</label>
+                                        <input type="number" class="form-control" name="mobileno" id="mono">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="passno">Passport number</label>
+                                        <input type="number" class="form-control" name="passportno" id="passno">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="aadharno">Aadharcard number</label>
+                                        <input type="number" class="form-control" id="aadharno" name="aadharno" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="emailid">Email id</label>
+                                        <input type="email" class="form-control" id="emailid" name="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="pass">Password</label>
+                                        <input type="password" class="form-control" id="pass" name="password" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="confpass">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confpass" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="username">UserName</label>
+                                        <input type="text" class="form-control" id="username" name="uname" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="aadhar_image">Adhar Card Image</label>
+                                        <input type="file" class="form-control" id="aadhar_image" name="file" required>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn ">
+                                    <h5 style="margin:auto">Register</h5>
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="text-center">
+                            <h6>Already have account?...<a href="/signin/">Go to login page.</a></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  {% endblock %}
+{% block escript %} 
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+{% endblock %}
+
+{% block script %}   
+
+$( "#ddlstate" ).change(function() {
+   var st=$("#ddlstate").val();
+    datatopass={"state":st}
+
+    $('#ddlcity')
+    .empty()
+
+   $.ajax({
+  type: "GET",
+  url: "/fetchcity",
+  data: datatopass,
+  success: function(msg){
+      msg=JSON.parse(msg);
+      var resp= msg["cities"]
+      console.log(resp);
+      for(var i=0;i <= resp.length;i++)
+      {
+        var o = new Option();
+        /// jquerify the DOM object 'o' so we can use the html method
+        $(o).html(resp[i]["name"]);
+        $(o).val(resp[i]["id"]);
+        $("#ddlcity").append(o);
+      }
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+});
+});
+$("#pass").blur(function() {
+        var password = $("#pass").val();
+
+        regx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
+        if(password != "")
+        {
+            if (regx.test(password) == false )
+            swal("Invalid Password\nPassword Must Contain \n1) At least One Capital Letter\n2) At least on Digit \n3) Small Letters")
+
+        }
+         })
+
+    $("#confpass").blur(function() {
+        var password = $("#pass").val();
+        var confpassword = $("#confpass").val();
+        if (confpassword != password) {
+            swal("Password and Confirm Password are not matching")
+        }
+    })
+
+    $("#mono").blur(function() {
+        var regxPhone = /^[7-9]\d{9}$/;
+        var mobileno = $(this).val();
+        if (regxPhone.test(mobileno) == false) {
+            swal("Invalid Mobile No");
+        }
+    })
+
+
+    
+  
+
+    function checksubmit() {
+        var password = $("#pass").val();
+
+        regx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
+        if (regx.test(password) == false)
+          {  swal("Invalid Password\nPassword Must Contain \n1) At least One Capital Letter\n2) At least on Digit \n3) Small Letters")
+            return false;
+          }
+        var confpassword = $("#confpass").val();
+        if (confpassword != password) {
+            swal("Password and Confirm Password are not matching")
+            return false;
+        }
+
+        var regxPhone = /^[7-9]\d{9}$/;
+        var mobileno = $("#mono").val();
+        if (regxPhone.test(mobileno) == false) {
+            swal("Invalid Mobile No");
+            return false
+        }
+        
+       
+        
+        return true;
+    
+}
+{% endblock%}
+ 
+

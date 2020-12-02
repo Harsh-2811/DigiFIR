@@ -1,0 +1,1487 @@
+{% extends 'Fir_app/basic.html' %}
+{% block title %} Police DashBoard {% endblock %}
+{% block ecss %}
+    <meta name="viewport" content="width=device-width" />
+    <title>UserDashBoard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+    {% block css %}
+        body {
+            background-color: #F7F7FC;
+        }
+        .card:hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+        .btn {
+            color: white;
+            background-color: #283990;
+            font-size: 18px;
+            width: 100%
+        }
+
+            .btn:hover {
+                border: 2px solid #283990;
+                color: #283990;
+                background-color: white;
+            }
+        thead {
+            background-color: #283990;
+            color : white
+        }
+
+        /* The message box is shown when the user clicks on the password field */
+        #message, #cmessage{
+            display: none;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f1f1f1;
+            color: #000;
+            position: relative;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        #message p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+
+        #cmessage p {
+            padding: 10px 35px;
+            font-size: 18px;
+        }
+        
+        /* Add a green text color and a checkmark when the requirements are right */
+        .valid {
+            color: green;
+        }
+
+        .valid:before {
+            position: relative;
+            left: -35px;
+            content: "✔";
+        }
+
+        /* Add a red text color and an "x" when the requirements are wrong */
+        .invalid {
+            color: red;
+        }
+
+        .invalid:before {
+            position: relative;
+            left: -35px;
+            content: "✖";
+        }
+{% endblock %}
+
+
+
+
+{% block body %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{message}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+    <section class="mt-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <button type="button" class="btn" id="btnuserprofile">My Profile</button>
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn" id="btnuserFIR">FIRs</button>
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn" id="btnacceptedFir">Accepted FIRs</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-3">
+        <div class="container">
+            <div class="collapse" id="userprofile">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <form onsubmit="return checksubmit()" method="post" action="/update_police/{{user.id}}">{% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="fname">First Name</label>
+                                        <input type="text" class="form-control" id="fname" name="fname" value="{{user.police_data.firstname}}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="mname">Middle Name</label>
+                                        <input type="text" class="form-control" id="mname" name="mname" value="{{user.police_data.middlename}}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="lname">Last Name</label>
+                                        <input type="text" class="form-control" id="lname" name="lname" value="{{user.police_data.lastname}}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Date of birth</label>
+                                        <input type="date" class="form-control" id="dob" name="dob" value = '{{user.police_data.dob|date:"Y-m-d"}}' required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="dob">Gender</label>
+                                        <div class="mt-1">
+                                           {% if user.userdata.gender == "Male" or user.police_data.gender == "male"%}
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="male" name="radiogender" id="radiomale" required checked>Male
+                                                </label>
+                                            </div>
+                                            {% else %}
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="male" name="radiogender" id="radiomale" required>Male
+                                                </label>
+                                            </div>
+                                            {% endif %}
+                                            {% if user.userdata.gender == "Female" or user.police_data.gender == "female"%}
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="female" name="radiogender" id="radiofemale" checked>Female
+                                                </label>
+                                            </div>
+                                            {% else %}
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" value="female" name="radiogender" id="radiofemale">Female
+                                                </label>
+                                            </div>
+                                            {% endif %}
+                                            {% if user.userdata.gender == "Transgender" or  user.police_data.gender == "transgender"%}
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiogender" value="transgender" id="radiotransgender" checked>Transgender
+                                                </label>
+                                            </div>
+                                            {% else %}
+                                                 <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="radiogender" value="transgender" id="radiotransgender">Transgender
+                                                </label>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="mono">Mobile number</label>
+                                        <input type="number" class="form-control" id="mono" name="mobileno" value="{{user.police_data.mobile_no}}" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="passno">Passport number</label>
+                                        <input type="number" class="form-control" id="passno" name="passportno" value="{{user.police_data.passport_no}}" >
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="aadharno">Aadharcard number</label>
+                                        <input type="number" class="form-control" id="aadharno" name="aadharno" required value="{{user.police_data.aadhar_no}}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="username">UserName</label>
+                                        <input type="text" class="form-control" id="username" name="uname" required value="{{user.username}}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="emailid">Email id</label>
+                                        <input type="email" class="form-control" id="emailid" name="email" required value="{{user.email}}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="pass">Password</label>
+                                        <input type="password" class="form-control" id="pass" name="password" required value="{{user.password}}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="confpass">Confirm Password</label>
+                                        <input type="password" class="form-control" id="confpass" value="{{user.password}}" required>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn w-50"><h5 style="margin:auto">Save</h5></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="collapse" id="userFIR">
+                <div class="card w-100 mt-3">
+                    <div class="card-body">
+                        <table id="tbluserFIR" class="table cell-border compact stripe hover">
+                           <thead>
+                                <tr>
+                                    <th>FIR no</th>
+                                    <th>Victim FirstName</th>
+                                    <th>Victim LastName</th>
+                                    <th>Victim Aadhar Number</th>
+                                    <th>Victim Passport Number</th>
+
+                                    <th>Station Name</th>
+                                    <th>Officer Name</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
+                                    <th>View Details</th>
+
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                            {% for fir in my_firs %}
+                                <tr>
+                                    <td>{{fir.id}}</td>
+                                    <td>{{fir.user.firstname}}</td>
+                                    <td>{{fir.user.lastname}}</td>
+                                    <td>{{fir.user.aadhar_no}}</td>
+                                    <td>{{fir.user.passport_no}}</td>
+                                    <td>{{fir.station}}</td>
+                                   <td>{{fir.sho_name}}</td>
+                                    <td>{{fir.crime_date}}</td>
+                                    <td>{{fir.crime_time}}</td>
+                                    <td>{{fir.status}}</td>
+                                    <td><button class="btn show_more" id="{{fir.id}}"  style="width:60%;"><i class="fa fa-file-text" aria-hidden="true"></i></button>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+              <div class="collapse" id="acceptedFir">
+                <div class="card w-100 mt-3">
+                    <div class="card-body">
+                        <table id="tblaccpFIR" class="table cell-border compact stripe hover">
+                           <thead>
+                                <tr>
+                                    <th>FIR no</th>
+                                    <th>User Id </th>
+                                    <th>Station Id</th>
+                                    <th>Officer Id </th>
+                                    <th>IPC</th>
+
+                                    <th>Crime Date</th>
+                                    <th>Crime Time</th>
+                                    <th>Report Date</th>
+                                    <th>Report Time</th>
+                                    <th>Diary No</th>
+                                    <th>Crime Location</th>
+                                    <th>Suspected People</th>
+                                    <th>Reason For delaying Fir</th>
+                                    <th>Stolen Things</th>
+                                    <th>Stolen Amount</th>
+                                    <th>Death Report No</th>
+                                    <th>Steps taken</th>
+                                    <th>Extra Details</th>
+                                    <th>Court Send Date</th>
+                                    
+
+                                </tr>
+
+                            </thead>
+                            <tbody id="accptedFirbody">
+                           
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        
+    </section>
+
+<div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header " style="background-color: #283990; color: #fff;">
+            <h4 class="modal-title ">FIR details</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          </div>
+          <div class="modal-body">
+            <form action="/addipc/" method="post">{% csrf_token %}
+                <div class="container">
+                    <input type="hidden" name="fir_id" id="fir_id">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_u_id">User ID</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="text" class="form-control" id="fir_u_id" disabled value="{{user.id}}">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_state">State</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="text" class="form-control" id="fir_state" disabled value="">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_city">City</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="text" class="form-control" id="fir_city" disabled value="">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_police_station">Police Station</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="text" class="form-control" id="fir_police_station" disabled value="">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_sho_name">SHO Officer Name</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="text" class="form-control" id="fir_sho_name" disabled value=""
+                                >
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_crime_date">Crime Date</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="date" class="form-control" id="fir_crime_date" disabled value="">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_crime_time">Crime Time</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="time" class="form-control" id="fir_crime_time" disabled value="">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_report_date">Report Date</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="date" class="form-control" id="fir_report_date" disabled value="" >
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_report_time">Report Time</label>
+                        </div>
+                        <div class="col-lg-6 col-md-9 col-sm-12">
+                            <input type="time" class="form-control" id="fir_report_time" disabled value="">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_crime_location">Crime Location</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="3" id="fir_crime_location"
+                            disabled  ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_suspected_people">Suspected People</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="3" id="fir_suspected_people"
+                                disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_reason_delay">Reasone for Delay FIR</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="3" id="fir_reason_delay" disabled>
+
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_stolen_things">Stolen Things</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="2" id="fir_stolen_things"
+                               disabled> </textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_stolen_amount">Stolen Amount</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="1" id="fir_stolen_amount"
+                                disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_death_report_no">Death Report Number</label>
+                        </div>
+                        <div class="col-lg-7 col-md-9 col-sm-12">
+                            <input type="text" class="form-control" id="fir_death_report_no" value="0">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="fir_extra_points">Additional Information</label>
+                        </div>
+                        <div class="col-lg-6 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="3" id="fir_extra_points"
+                               disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="ipc">IPC</label>
+                        </div>
+                        <div class="col-lg-6 col-md-9 col-sm-12">
+                            <textarea class="form-control" rows="3" id="ipc"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-lg-2">
+                        <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
+                            <label for="PDN">Police Diary Number</label>
+                        </div>
+                        <div class="col-lg-6 col-md-9 col-sm-12">
+                            <input type="number" class="form-control" id="PDN">
+                        </div>
+                    </div>
+                    <div class="row mt-lg-6">
+
+                        <div class="col-lg-8 col-md-9 col-sm-12">
+                            <button type="button" class="btn"  id="savefir">Accept And Save</button>
+
+                        </div>
+                    </div>
+            </form>
+          </div>
+          <div class="modal-footer text-center">
+            <button type="button" class="btn" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    {% endif %}
+    <script>
+        
+       
+              
+           
+
+        var station_id;
+        $(".show_more").click(function(){
+     $.ajax({
+  type: "GET",
+  url: "/fetchfirdata",
+  data: {"id":$(".show_more").attr('id') },
+  success: function(msg){
+      msg=JSON.parse(msg);
+
+      if(msg['msg'] == 'success')
+        {
+
+            console.log(msg);
+            var data = JSON.parse(msg.fir)
+            var fields = data[0].fields
+            station_id=fields.station;
+            
+            $("#fir_state").val(msg['state'])
+            $("#fir_city").val(msg['city'])
+            $("#fir_police_station").val(msg['station'])
+            $("#fir_id").val(data[0].pk);
+            $("#fir_sho_name").val(fields.sho_name)
+            $("#fir_u_id").val(fields.user)
+            $("#fir_crime_date").val(fields.crime_date)
+            $("#fir_crime_time").val(fields.crime_time)
+            $("#fir_report_date").val(fields.report_date)
+            $("#fir_report_time").val(fields.report_time)
+            $("#fir_crime_location").val(fields.crime_location)
+            $("#fir_suspected_people").val(fields.suspected_people)
+            $("#fir_reason_delay").val(fields.reasone_for_firdelay)
+            $("#fir_stolen_things").val(fields.stolen_things)
+            $("#fir_stolen_amount").val(fields.stolen_amount)
+            if(fields.death_report_number != null)
+            {
+                $("#fir_death_report_no").val(fields.death_report_number)
+            }
+
+            else
+            {
+                $("#fir_death_report_no").val("0")
+            }
+            $("#fir_death_report_no").val(fields.death_report_number)
+            $("#fir_extra_points").val(fields.additional_info)
+
+            $("#myModal").modal('show');
+            console.log(station_id)
+        }
+
+
+
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+});
+});
+
+    </script>
+
+
+  {% endblock %}
+
+ {% block escript %}
+   
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.0/web3.min.js"></script>
+
+   <script>
+     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+
+     web3.eth.defaultAccount = web3.eth.accounts[0];
+     var abi=[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			}
+		],
+		"name": "addCourtSendDate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR",
+				"name": "_fir",
+				"type": "tuple"
+			}
+		],
+		"name": "addFir",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_ipc",
+				"type": "string"
+			}
+		],
+		"name": "addIpc",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_steps",
+				"type": "string"
+			}
+		],
+		"name": "addStepsTaken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "officer_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getPoliceFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "station_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getStationFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_user_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getUserFir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getfir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FirInfoV2.FIR",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+     var CoursetroContract = new web3.eth.Contract(abi,'0x237f0410770a95301fDa7dF8a588259Ee65Fa344')
+
+    var officer_id1={{user.id}};
+
+     $("#savefir").click(function() {
+            web3.eth.getAccounts().then(function(accounts){
+                var acc = accounts[0];
+                var fir = {
+                    fir_id :parseInt($("#fir_id").val()),
+                    user_id :parseInt($("#fir_u_id").val()),
+                    station_id :parseInt(station_id),
+                    officer_id :parseInt(officer_id1),
+                    ipc:[$("#ipc").val()],
+                    crime_date:$("#fir_crime_date").val(),
+                    crime_time:$("#fir_crime_time").val(),
+                    report_date:$("#fir_report_date").val(),
+                    report_time:$("#fir_report_time").val(),
+                    police_station_diary_no:parseInt($("#PDN").val()),
+                    crime_location:$("#fir_crime_location").val(),
+                    suspected_people:$("#fir_suspected_people").val().split(","),
+                    reasone_delay_fir:$("#fir_reason_delay").val(),
+                    stolen_things:$("#fir_stolen_things").val(),
+                    stolen_ammount:$("#fir_stolen_amount").val(),
+                    death_report_no:parseInt($("#fir_death_report_no").val()),
+                    steps_taken:["Dummy"],
+                    details:$("#fir_extra_points").val(),
+                    court_send_date:"2020-2-24"
+                }
+                return CoursetroContract.methods.addFir(fir).send({from:acc,gasLimit:"600000"});
+            }).then(function(tx){
+                console.log(tx)
+
+               $.ajax({
+  type: "GET",
+  url: "/sendtoblockchain",
+  data: {"id":$(".show_more").attr('id') },
+  success: function(msg){
+      msg=JSON.parse(msg);
+      if(msg.msg=="success")
+      {
+        $("#myModal").modal('hide');
+        swal("Fir Accepted","Fir Data is Successfully Added to Blockchain","success");
+      }
+  },
+  error: function(XMLHttpRequest, textStatus, errorThrown) {
+     alert("some error");
+  }
+});
+
+                
+                
+            }).catch(function(tx){
+                console.log(tx)
+            })
+         
+
+        });
+       
+        var answer={}
+               var p_id = {{user.id}}
+            CoursetroContract.methods.getPoliceFir(p_id).call().then(function(answer){
+                console.log(answer);
+                console.log(answer.length);
+                for(var i =0 ; i< answer.length ; i++ )
+                {
+                    console.log(answer[i]);
+                    var row=document.createElement("tr");
+                    var fir_id=document.createElement("td");
+                    fir_id.innerHTML  =   answer[i].fir_id;
+                    row.appendChild(fir_id)
+                    
+                    var user_id = document.createElement("td");
+                    user_id.innerHTML = answer[i].user_id
+                    row.appendChild(user_id)
+                    var station_id = document.createElement("td");
+                    station_id.innerHTML = answer[i].station_id 
+                    row.appendChild(station_id)
+                    var officer_id = document.createElement("td");
+                    officer_id.innerHTML = answer[i].officer_id
+                    row.appendChild(officer_id)
+                    
+                    var ipc = document.createElement("td");
+                    ipc.innerHTML = answer[i].ipc
+                    row.appendChild(ipc)
+                    var crime_date = document.createElement("td");
+                    crime_date.innerHTML = answer[i].crime_date
+                    row.appendChild(crime_date)
+                    var crime_time = document.createElement("td");
+                    crime_time.innerHTML = answer[i].crime_time
+                    row.appendChild(crime_time)
+                    var report_date = document.createElement("td");
+                    report_date.innerHTML = answer[i].report_date
+                    row.appendChild(report_date)
+                    var report_time = document.createElement("td");
+                    report_time.innerHTML = answer[i].report_time
+                    row.appendChild(report_time)
+                    
+                    var police_station_diary_no = document.createElement("td");
+                    police_station_diary_no.innerHTML = answer[i].police_station_diary_no
+                    row.appendChild(police_station_diary_no)
+                    var crime_location = document.createElement("td");
+                    crime_location.innerHTML = answer[i].crime_location
+                    row.appendChild(crime_location)
+                    var suspected_people = document.createElement("td");
+                    suspected_people.innerHTML = answer[i].suspected_people
+                    row.appendChild(suspected_people)
+                    
+                    
+                    var reasone_delay_fir = document.createElement("td");
+                    reasone_delay_fir.innerHTML = answer[i].reasone_delay_fir
+                    row.appendChild(reasone_delay_fir)
+                    var stolen_things = document.createElement("td");
+                    stolen_things.innerHTML = answer[i].stolen_things
+                    row.appendChild(stolen_things)
+                    var stolen_amount = document.createElement("td");
+                    stolen_amount.innerHTML = answer[i].stolen_amount
+                    row.appendChild(stolen_amount)
+                    
+                    
+                    var death_report_no = document.createElement("td");
+                    death_report_no.innerHTML =answer[i].death_report_no
+                    row.appendChild(death_report_no)
+                    var steps_taken = document.createElement("td");
+                    steps_taken.innerHTML = answer[i].steps_taken
+                    row.appendChild(steps_taken)
+                    var details = document.createElement("td");
+                    details.innerHTML = answer[i].details
+                    row.appendChild(details)
+                    var court_send_date = document.createElement("td");
+                    court_send_date.innerHTML =answer[i].court_send_date
+                    row.appendChild(court_send_date)
+                    $("#accptedFirbody").append(row);
+                }
+                $('#tblaccpFIR').DataTable({
+                     "scrollX": true
+            }
+            );
+            })
+       
+</script>
+
+{% endblock %}
+{% block script %}
+
+    
+    $("#pass").blur(function() {
+        var password = $("#pass").val();
+
+        regx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
+        if (regx.test(password) == false)
+            swal("Invalid Password\nPassword Must Contain \n1) At least One Capital Letter\n2) At least on Digit \n3) Small Letters")
+    })
+
+    $("#confpass").blur(function() {
+        var password = $("#pass").val();
+        var confpassword = $("#confpass").val();
+        if (confpassword != password) {
+            swal("Password and Confirm Password are not matching")
+        }
+    })
+
+    $("#mono").blur(function() {
+        var regxPhone = /^[7-9]\d{9}$/;
+        var mobileno = $(this).val();
+        if (regxPhone.test(mobileno) == false) {
+            swal("Invalid Mobile No");
+        }
+    })
+
+
+    
+    var application = angular.module('myapp', []);
+    application.controller('states', function($scope) {
+        $scope.sts = [{
+            name: 'Select State'
+        }, {
+            name: 'Gujarat'
+        }, {
+            name: 'Maharashtra'
+        }]
+    });
+
+    function checksubmit() {
+        var password = $("#pass").val();
+
+        regx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
+        if (regx.test(password) == false)
+          {  swal("Invalid Password\nPassword Must Contain \n1) At least One Capital Letter\n2) At least on Digit \n3) Small Letters")
+            return false;
+          }
+        var confpassword = $("#confpass").val();
+        if (confpassword != password) {
+            swal("Password and Confirm Password are not matching")
+            return false;
+        }
+
+        var regxPhone = /^[7-9]\d{9}$/;
+        var mobileno = $("#mono").val();
+        if (regxPhone.test(mobileno) == false) {
+            swal("Invalid Mobile No");
+            return false
+        }
+        
+       
+        
+        return true;
+    }
+
+
+
+
+        $(document).ready(function () {
+            $("#userFIR").collapse('show');
+
+            $("#btnuserprofile").click(function () {
+                $("#userprofile").collapse('show');
+                $("#userFIR").collapse('hide');
+                $("#Police").collapse('hide');
+                $("#acceptedFir").collapse('hide');
+            });
+            $("#btnuserFIR").click(function () {
+                $("#userprofile").collapse('hide');
+                $("#userFIR").collapse('show');
+                $("#Police").collapse('hide');
+                $("#acceptedFir").collapse('hide');
+            });
+            $("#btnPolice").click(function () {
+                $("#userprofile").collapse('hide');
+                $("#userFIR").collapse('hide');
+                $("#Police").collapse('show');
+                $("#acceptedFir").collapse('hide');
+            });
+
+            $("#btnacceptedFir").click(function () {
+
+                $("#userFIR").collapse('hide');
+                $("#userprofile").collapse('hide');
+                $("#acceptedFir").collapse('show');
+            });
+            $('#tbluserFIR').DataTable(
+
+            );
+
+
+
+        });
+{% endblock %}
