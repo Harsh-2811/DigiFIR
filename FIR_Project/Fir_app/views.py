@@ -1,7 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect
 import json
-import hashlib,uuid
-import os
 from django.core import serializers
 import random
 import string
@@ -14,7 +12,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.db import transaction
 from django.core.mail import send_mail,EmailMessage
 from datetime import timedelta
-# Create your views here.
+from django.contrib.sessions.backends.db import SessionStore
 def index(request):
     param={'victim':False,'police':False,'error':False,'sho':False}
     if request.session.has_key('victim'):
@@ -277,6 +275,10 @@ def loginprocess(request):
 
             if user.is_user == True:
                 request.session["victim"] = user.id
+                my_session=SessionStore(session_key="VictimUserName01")
+                my_session['Victim']=user.id
+
+
             elif user.is_police == True:
                 request.session["police"] = user.id
             elif user.is_sho == True:
@@ -466,3 +468,5 @@ def sendtoblockchain(request):
         resp=json.dumps({'msg':'failed'})
         return HttpResponse(resp)
 
+def Rasa(request):
+    return render(request,"Fir_app/Rasa.html")

@@ -33,13 +33,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    'Fir_app',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Fir_app',
+
 ]
 AUTH_USER_MODEL = 'Fir_app.MyUser'
 MIDDLEWARE = [
