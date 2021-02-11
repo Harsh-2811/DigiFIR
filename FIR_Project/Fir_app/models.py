@@ -5,7 +5,15 @@ from django.contrib.auth.models import PermissionsMixin
 import datetime
 
 from datetime import date
+from geoposition.fields import GeopositionField
 
+class PointOfInterest(models.Model):
+    name = models.CharField(max_length=100)
+    position = GeopositionField()
+
+
+    def __str__(self):
+        return self.name
 # Create your models here.
 class MyManager(BaseUserManager):
 
@@ -144,9 +152,12 @@ class Police_Station_data(models.Model):
     station_name=models.CharField(default="",max_length=50)
     sho_fname=models.CharField(default="",max_length=20)
     sho_lname=models.CharField(default="",max_length=20)
+    main_area = models.CharField(default="",max_length=100)
     state = models.ForeignKey(states, on_delete=models.CASCADE)
     city = models.ForeignKey(city, on_delete=models.CASCADE)
     pincode = models.IntegerField(default="")
+    latitude = models.DecimalField(max_digits=30,decimal_places=10,blank=True,null=True,default=0.0)
+    longitude = models.DecimalField(max_digits=30,decimal_places=10,blank=True,null=True,default=0.0)
 
     def __str__(self):
         return self.station_name
@@ -207,3 +218,35 @@ class Fir(models.Model):
 
     def __str__(self):
         return self.user.firstname
+
+class dummy_fir(models.Model):
+    first_name=models.CharField(max_length=100,default="")
+    middle_name=models.CharField(max_length=100,default="")
+    last_name=models.CharField(max_length=100,default="")
+    dob=models.DateField(blank=True,null=True)
+    type=models.CharField(max_length=100,default="")
+
+    def __str__(self):
+        return self.first_name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100,default="")
+    p_id = models.ForeignKey('self',blank=True,null= True,on_delete=models.DO_NOTHING,related_name="Children")
+
+    def __str__(self):
+        if self.p_id:
+            return self.p_id.name
+        else:
+            return "Main Parent"
+
+class Alerts(models.Model):
+    user= models.ForeignKey(UserData,on_delete=models.CASCADE)
+    main_area = models.CharField(max_length=100,default="")
+    station = models.ForeignKey(Police_Station_data,on_delete=models.CASCADE)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.firstname
+

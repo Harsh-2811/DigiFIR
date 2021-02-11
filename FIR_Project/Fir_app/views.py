@@ -12,8 +12,31 @@ from django.contrib.auth import authenticate,login,logout
 from django.db import transaction
 from django.core.mail import send_mail,EmailMessage
 from datetime import timedelta
-from django.contrib.sessions.backends.db import SessionStore
+from django.views.decorators.csrf import csrf_exempt
+import reverse_geocoder as rg
+import pprint
+session_key=''
+sessions_dict={}
+from django.conf import settings
+from math import cos, asin, sqrt
+import csv
+def csv_html(request):
+    csv_fp = open(f'D:\Django\DigiFIR\FIR_Project\media\State.csv', 'r')
+    reader = csv.DictReader(csv_fp)
+    headers = [col for col in reader.fieldnames]
+    out = [row for row in reader]
+    return render(request, 'Fir_app/csv_table.html', {'data': out, 'headers': headers})
+
+def distance(lat1, lon1, lat2, lon2):
+    p = 0.017453292519943295
+    a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p)*cos(lat2*p) * (1-cos((lon2-lon1)*p)) / 2
+    return 12742 * asin(sqrt(a))
+
+def closest(data, v):
+    return min(data, key=lambda p: distance(v['lat'],v['lon'],p['lat'],p['lon']))
+
 def index(request):
+    print(settings.SESSION_ID)
     param={'victim':False,'police':False,'error':False,'sho':False}
     if request.session.has_key('victim'):
         param["victim"]= True
@@ -23,6 +46,30 @@ def index(request):
         param["sho"]= True
 
     return render(request,"Fir_app/index.html",param)
+
+
+@csrf_exempt
+def latlong(request):
+    if request.method == "POST":
+        latitude = request.POST['latitude']
+        longitude= request.POST['longitude']
+
+        latlong_list = Police_Station_data.objects.all().values('latitude','longitude')
+        tempDataList1 =[]
+        for ite in latlong_list:
+           #print(ite['latitude'])
+           tempDataList1.append({'lat':float(ite["latitude"]),'lon':float(ite["longitude"])})
+        #print(tempDataList1)
+
+        v = {'lat': float(latitude), 'lon': float(longitude)}
+        #print(v)
+        cls_dst = closest(tempDataList1,v)
+
+        station = Police_Station_data.objects.get(latitude = cls_dst['lat'],longitude=cls_dst['lon'])
+        print(station.main_area)
+
+        return HttpResponse('Data Got')
+    return render(request,"Fir_app/latlong.html")
 
 def signinpage(request):
     param={'signin':True,'signup':False}
@@ -275,9 +322,8 @@ def loginprocess(request):
 
             if user.is_user == True:
                 request.session["victim"] = user.id
-                my_session=SessionStore(session_key="VictimUserName01")
-                my_session['Victim']=user.id
-
+                settings.SESSION_ID=user.id
+                print(settings.SESSION_ID)
 
             elif user.is_police == True:
                 request.session["police"] = user.id
@@ -368,6 +414,7 @@ def firregistration(request):
             station_id = request.POST['police_station']
             sho = request.POST['sho_name']
             crime_date = request.POST['crime_date']
+
             crime_time = request.POST['crime_time']
             report_date = datetime.datetime.today().date()
             report_time = datetime.datetime.today().time()

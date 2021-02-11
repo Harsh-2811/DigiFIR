@@ -257,8 +257,9 @@
                         <a class="nav-link" href="/dashboard_police/"><span class="links">Police Dashboard <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
                     </li>
                     {% endif %}
-
-
+                    {% if victim %}
+                        <button class="btn btn-danger " id="latlong">In Danger</button>
+                    {% endif %}
                     <li class="nav-item dropdown">
 
                       <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -324,12 +325,135 @@
         </div>
     </div>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-</body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+
+  <script>
+      var address;
+      function getaddress(){
+
+        var platform = new H.service.Platform({
+        "apikey": "CKrurbxpWPpSbO_8vyz21R3F2IGmGxl_GHo-ZxscqSI"
+    });
+    var geocoder = platform.getSearchService();
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            geocoder.reverseGeocode(
+                {
+                    limit: 1,
+                    at: position.coords.latitude + "," + position.coords.longitude
+                }, data => {
+                    console.log(data.items[0])
+                    alert(data.items[0].address.district + data.items[0].address.subdistrict);
+
+                }, error => {
+                    console.error(error);
+                }
+            );
+        });
+    } else {
+        console.error("Geolocation is not supported by this browser!");
+    }
+      }
+  {%  if user.is_authenticated %}
+     username = "{{ user.username }}" ;
+    console.log(username)
+  {% endif %}
+  var latitude,longitude;
+  $("#latlong").click(function(){
+        
+          if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        var accuracy = position.coords.accuracy;
+        console.log(latitude,longitude)
+        datavalue = {
+                        latitude : latitude,
+                        longitude : longitude
+                    }
+                    getaddress();
+             $.ajax('latlong/', {
+
+                    type: 'POST',  // http method
+                    data : datavalue,
+                    success: function (data, status, xhr) {
+
+                        alert(data);
+
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                             alert(errorMessage);
+                    }
+                });
+
+    },
+    function error(msg) {alert('Please enable your GPS position feature.');},
+    {maximumAge:10000, timeout:5000, enableHighAccuracy: true});
+} else {
+    alert("Geolocation API is not supported in your browser.");
+}
+            
+
+        });
+
+        console.log(window.location.host)
+        const roomName = {{room_id}}
+        userName={{ userName }}
+        console.log(window.location.host)
+        const chatSocket = new WebSocket(
+            'ws://'
+            +window.location.host
+            + '/ws/diet_chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+
+        };
+
+        $(window).on('load', function(){
+
+        });
+        chatSocket.onopen = function(e) {
+
+
+        };
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#msg').focus();
+        document.querySelector('#msg').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#send').click();
+            }
+        };
+
+        document.querySelector('#send').onclick = function(e) {
+            const messageInputDom = document.querySelector('#msg');
+            const message = messageInputDom.value;
+
+            chatSocket.send(JSON.stringify({
+                'latitude': data.latitude,
+                'longitude': data.longitude,
+                'code': 'new_message',
+                'username':username,
+            }));
+            messageInputDom.value = '';
+
+        };
+
+
+
+    </script>
+    <!-- jQuery library -->
+   </body>
 
 </html>
