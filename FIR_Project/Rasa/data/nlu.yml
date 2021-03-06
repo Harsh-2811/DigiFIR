@@ -1,0 +1,370 @@
+version: "2.0"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - good afternoon
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+    - ok
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: request_user_details
+  examples: |
+    - I want to file an FIR
+    - i want to register an fir
+    - fir
+    - FIR
+    - report an fir
+    - complaint
+    - write a complaint for me
+
+
+#- intent: user_name_list
+#  examples: |
+#    - [Savan](user_name)
+#    - [Denish](user_name)
+#    - [Adarsh](user_name)
+#    - [Uttam](user_name)
+#    - [Kevin](user_name)
+#    - [Rutvik](user_name)
+#    - [Nirav](user_name)
+#    - my username is [Nirav](user_name)
+#    - my username is [Adarsh](user_name)
+#    - my username is [Uttam](user_name)
+#    - my username is [Rutvik](user_name)
+#    - user name is [Adarsh](user_name)
+#    - user name is [Uttam](user_name)
+#    - user name is [Rutvik](user_name)
+#    - user name: [savan](user_name)
+
+- intent: crime_date_list
+  examples: |
+    - today's date is [6 March 2021](crime_date)
+    - crime date is [5 March  2021](crime_date)
+    - date of crime is [14 February 2021](crime_date)
+    - [6 March 2021](crime_date)
+    - [2/5/2020](crime_date)
+
+- intent: crime_time_list
+  examples: |
+    - current time is [11:30 AM](crime_time)
+    - time [12:15 morning](crime_time)
+    - time of crime is [at noon](crime_time)
+    - time: [afternoon at 3:16](crime_time)
+    - time is [around 6 o clock at evening](crime_time)
+    - [9 o'clock in the morning](crime_time)
+    - [8:30 in morning](crime_time)
+    - [11:25 at night](crime_time)
+
+
+# - intent: report_date_list
+#   examples: |
+#     - today's date is [18 september 1999](report_date)
+#     - reporting date is [July 24 2000](report_date)
+#     - date of reporting is [07/08/1978](report_date)
+#     - report date [14-12-2020](report_date)
+#     - [2/5/2020](report_date)
+#     - [12-8-2020](report_date)
+
+# - intent: report_time_list
+#   examples: |
+#     - current time is [11:30 AM](report_time)
+#     - time [12: 15 morning](report_time)
+#     - time of reporting is [at noon](report_time)
+#     - time: [afternoon at 3:16](report_time)
+#     - time is [around 6 o clock at evening](report_time)
+#     - [9 o'clock in the morning](report_time)
+#     - [8.30 in morning](report_time)
+#     - [11.25 at night](report_time)
+
+
+- intent: crime_location_list
+  examples: |
+    - [Hirabag](crime_location)
+    - [Kapodara](crime_location)
+    - [Katargaam](crime_location)
+    - [Adajan](crime_location)
+    - [Vesu](crime_location)
+    - the crime happened at [Hirabag](crime_location)
+    - crime location [Kapodara](crime_location)
+    - crime was at [Katargaam](crime_location)
+    - crime was at [Kapodara](crime_location)
+    - I was at [Kapodara](crime_location)
+    - near [ICICI bank Vesu](crime_location)
+    - on the [main road varachha](crime_location)
+    - at [Bhagal](crime_location)
+    - somewhere in [Utran near power station](crime_location)
+    - [sunny road](crime_location)
+    - [Ram Mandir](crime_location)
+    - around [church](crime_location)
+
+- intent: suspected_people_list
+  examples: |
+    - these are the suspected people [Rameshbhai Mulani and Sarojben Mulani](suspected_people)
+    - suspected people [Naresh Patel](suspected_people)
+    - suspects [Ahmed Bawa, Ramesh Dula, Harsh Patel and Darshan Rathod](suspected_people)
+    - [Nirav Limbani and Savan Budheliya](suspected_people)
+    - [Denish Kumar Chovatiya](suspected_people)
+    - [Adarsh Tarsariya](suspected_people)
+    - [Uttam and Adarsh](suspected_people)
+    - [Savan Budheliya and Harsh Patel](suspected_people)
+    - [Denish Kumar Chovatiya](suspected_people)
+    - [Denish Kumar Chovatiya](suspected_people)
+    - [Bharatbhai patel and mohamad shekh](suspected_people)
+
+
+
+
+- intent: state_name
+  examples: |
+    - my state name is [Chennai](sname)
+    - my state name is [Gujarat](sname)
+    - my state name is [Rajasthan](sname)
+    - my state name is [Maharastra](sname)
+    - my state name is [abcd](sname)
+    - state name is [Chennai](sname)
+    - state name is [Gujarat](sname)
+    - state name is [Rajasthan](sname)
+    - state name is [Maharastra](sname)
+
+    - state is [Chennai](sname)
+    - state is [Gujarat](sname)
+    - state is [Rajasthan](sname)
+    - state is [Maharastra](sname)
+    - state is [abcd](sname)
+    - [Chennai](sname) is my state
+    - [Gujarat](sname) is my state
+    - [Rajasthan](sname) is my state
+    - [Maharastra](sname) is my state
+
+    - my state name is [Chennai](sname)
+    
+- intent: city_name
+  examples: |
+    - my city name is [Surat](cname)
+    - my city name is [Punjab](cname)
+    - my city name is [Rajkot](cname)
+    - my city name is [Mumbai](cname)
+    - my city name is [abcd](cname)
+    - city name is [Surat](cname)
+    - city name is [Punjab](cname)
+    - city name is [Rajkot](cname)
+    - city name is [Mumbai](cname)
+
+    - city is [Surat](cname)
+    - city is [Punjab](cname)
+    - city is [Rajkot](cname)
+    - city is [Mumbai](cname)
+    - city is [abcd](cname)
+    - [Surat](cname) is my city
+    - [Punjab](cname) is my city
+    - [Rajkot](cname) is my city
+    - [Mumbai](cname) is my city
+
+    - city is [Punjab](cname)
+    - city name is [surat](cname)
+
+
+# - intent: crime_type_list
+#   examples: |
+#     - i want to register an fir for [accident](crime_type)
+#     - register an fir for [fraud](crime_type)
+#     - file fir for [kidnapping](crime_type)
+#     - fir for [murder](crime_type)
+#     - fir [robbery](crime_type)
+#********************************************************************************************************************************
+
+# Robbery...
+- intent: crime_theft
+  examples: |
+    - i want to register an fir for [theft](crime_type)
+    - my things have been [stolen](crime_type)
+    - my money has been [robbed](crime_type)
+    - [robbing](crime_type)
+    - [robbery](crime_type)
+- intent: stolen_things_list
+  examples: |
+    - stolen things are [Watch and Wallet](stolen_things)
+    - things that were stolen [Money, necklace and ring](stolen_things)
+    - [shoes, belt, perfume, earphones, Jewellery, Mobile, laptop ](stolen_things)
+    - [belt](stolen_things)
+    - [perfume](stolen_things)
+    - [earphones](stolen_things)
+    - [Jewellery](stolen_things)
+    - [Mobile](stolen_things)
+
+
+- intent: stolen_amount_list
+  examples: |
+    - stolen amount is [14000 rs](stolen_amount)
+    - amount of money that was stolen [12,541 only](stolen_amount)
+    - [15478955](stolen_amount)
+    - [2,00,000](stolen_amount)
+    - [2 lacs](stolen_amount)
+    - [5 million dollars](stolen_amount)
+    - [1 crore rupees](stolen_amount)
+    - [one and half million pounds](stolen_amount)
+    - [quarter of 300 dirhams](stolen_amount)
+
+# - intent: details_number_of_people
+#   examples: |
+#     - there were around [3](number_people)
+#     - number of people is [five](number_people)
+#     - approx [5](number_people) people were there
+#     - [two](number_people)
+#     - around [4](number_people)
+#     - [10](number_people)
+#     - [twenty](number_people)
+#     - [8](number_people)
+#     - [9](number_people)
+  
+- intent: details_about_injuries
+  examples: |
+    - i was [beaten by stick](injury_occured)
+    - they [punched me very hardly](injury_occured)
+    - [i was beaten harshly](injury_occured)
+    - [they kicked me around 15 times](injury_occured)
+    - [one of person threw a stone on me](injury_occured)
+    - [they slapped me](injury_occured)
+    - [abused](injury_occured)
+    - [attacked on me using knife](injury_occured)
+    - [they attacked me](injury_occured)
+
+# - intent: details_about_person_with_you
+  # examples: |
+  #   - these people were with me [Maheshbhai and Amishaben](people_with)
+  #   - [Naresh Patel](people_with) was with me
+  #   - [Nirav Limbani and Savan Budheliya](people_with)
+  #   - [Denish Kumar Chovatiya](people_with)
+  #   - [Bharatbhai patel and mohamad shekh](people_with)
+
+
+#********************************************************************************************************************************
+
+# Accident...
+- intent: crime_accident
+  examples: |
+    - i want to register an fir for [accident](crime_type)
+    - i have an [accident](crime_type)
+    - [road accident](crime_type)
+    - [highway accident](crime_type)
+    - [an accident](crime_type)
+
+- intent: details_vehicle_type
+  examples: |
+    - that was a [truck](vehicle_type)
+    - i guess it was [a tesla car](vehicle_type)
+    - [it was a bike](vehicle_type)
+    - [splendor bike](vehicle_type)
+    - [royal enfield bullet](vehicle_type)
+    - [small truck of ashok layland](vehicle_type)
+    - [bolero car](vehicle_type)
+    - [jeep](vehicle_type)
+    - [rickshaw](vehicle_type)
+
+
+- intent: details_number_of_people_died
+  examples: |
+    - there were around [3](number_people_died) died
+    - number of people died is [five](number_people_died)
+    - approx [5](number_people_died) people died
+    - [two](number_people_died) died
+    - [7](number_people_died)
+    - [two](number_people_died)
+    - around [4](number_people_died)
+    - [10](number_people_died)
+    - [twenty](number_people_died)
+    - [8 people](number_people_died)
+    - [9](number_people_died)
+
+
+#********************************************************************************************************************************
+
+# Kidnapping...
+- intent: crime_kidnapping
+  examples: |
+    - i want to register an fir for [kidnapping](crime_type)
+    - my son is [kidnapped](crime_type)
+    - my daughter has been [kidnapped](crime_type)
+    - a friend of mine has been [kidnapped](crime_type)
+    - my father is [kidnapped](crime_type)
+    - my mother is [kidnapped](crime_type)
+
+- intent: details_person_location
+  examples: |
+    - i was at [our home](person_location)
+    - near [kapodra circle](person_location)
+    - at that time i was at [office](person_location)
+    - [Hirabag](person_location)
+    - in [Katargaam](person_location)
+    - near [ICICI bank Vesu](person_location)
+    - on the [main road varachha](person_location)
+    - at [Bhagal](person_location)
+    - somewhere in [Utran near power station](person_location)
+    - [sunny road](person_location)
+    - [Ram Mandir](person_location)
+    - around [church](person_location)
+
+- intent: details_kidnapper_call
+  examples: |
+   - [yes kidnapper has called](kidnapper_call)
+   - [no there is no any call yet](kidnapper_call)
+   - [no call](kidnapper_call)
+   - [yes he contacted](kidnapper_call)
+   - [have not heard anything](kidnapper_call)
+   - [yes](kidnapper_call)
+   - [no](kidnapper_call)
+   - [yeah](kidnapper_call)
+   - [nope](kidnapper_call)
+
+# - intent: details_kidnapper_ask_ransom
+#   examples: |
+#     - they have asked for [1 million](ransom_demand)
+#     - he [asked for 10 lacs rupees](ransom_demand)
+#     - [asked for property](ransom_demand)
+#     - [demanded for a land](ransom_demand)
+#     - [diamonds](ransom_demand)
+#     - [locker key](ransom_demand)
+#     - [property papers](ransom_demand)

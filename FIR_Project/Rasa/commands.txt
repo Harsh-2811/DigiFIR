@@ -1,0 +1,7 @@
+python manage.py runserver
+python manage.py migrate
+python manage.py runserver
+
+
+
+rasa run -m models --enable-api --cors "*" --debug

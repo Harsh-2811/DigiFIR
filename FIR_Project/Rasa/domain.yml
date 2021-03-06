@@ -1,0 +1,367 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - request_user_details
+#  - user_name_list
+  - crime_date_list
+  - crime_time_list
+  # - report_date_list
+  # - report_time_list
+  - crime_location_list
+  - suspected_people_list:
+      use_entities:
+      - suspected_people
+  - stolen_things_list
+  - stolen_amount_list:
+      use_entities:
+      - stolen_amount
+  - crime_type_list
+  - city_name:
+      use_entities:
+      - cname
+  - state_name:
+      use_entities:
+      - sname
+  - crime_theft
+  # - details_number_of_people
+  - details_about_person_with_you:
+      use_entities:
+      - people_with
+  - details_about_injuries
+  - crime_accident
+  - details_vehicle_type
+  - details_number_of_people_died
+  - crime_kidnapping
+  - details_person_location
+  - details_kidnapper_call
+  # - details_kidnapper_ask_ransom
+
+
+entities:
+#  - user_name
+  - crime_date
+  - crime_time
+  # - report_date
+  # - report_time
+  - crime_location
+  - suspected_people
+  - stolen_things
+  - stolen_amount
+  - crime_type
+  - cname
+  - sname
+  - injury_occured
+  - people_with
+  - vehicle_type
+  - number_people_died
+  - person_location
+  - kidnapper_call
+  # - ransom_demand
+  - call_details
+  - robbery_details
+  - accident_details
+
+actions:
+  - action_slot_reset_demo
+  - action_submit_data
+  - utter_ask_cname
+#  - utter_ask_user_name
+  - utter_ask_sname
+  - utter_ask_crime_date
+  - utter_ask_crime_time
+  - utter_ask_crime_location
+  - utter_ask_suspected_people
+  - utter_ask_stolen_things
+  - utter_ask_stolen_amount
+  - utter_ask_crime_type
+  - utter_ask_call_details
+  - utter_submit_ask
+  - validate_basic_user_details_form
+  - kidapping_details_form
+  - robbery_details_form
+  - accident_details_form
+  - ACTION_DEFAULT_FALLBACK_NAME
+
+
+  
+responses:
+#  utter_ask_user_name:
+#    - text: "What is your user name?"
+
+  utter_ask_crime_date:
+    - text: "Enter date of crime."
+
+  utter_ask_crime_time:
+    - text: "Enter time of crime."
+
+  # utter_ask_report_date:
+  #   - text: "Enter the date of reporting the FIR."
+  
+  # utter_ask_report_time:
+  #   - text: "What is the time of reporting?"
+
+  utter_ask_crime_location:
+    - text: "Enter crime place."
+
+  utter_ask_suspected_people:
+    - text: "Enter the names of suspected people."
+
+  utter_ask_stolen_things:
+    - text: "Which things were stolen during crime was happening?"
+
+  utter_ask_stolen_amount:
+    - text: "Enter the amount of money stolen."
+
+  utter_ask_crime_type:
+    - text: "Crime type for filing an F.I.R."
+
+  utter_submit_ask:
+    - text: "Do you want to submit the data?\n`Yes` or `No`"
+
+  utter_ask_sname:
+    - text: "Enter state name."
+  
+  utter_ask_cname:
+    - text: "Enter city name."
+  
+  utter_wrong_sname:
+    - text: Wrong Input.
+  
+  utter_wrong_cname:
+    - text: Wrong Input.
+  
+  # Robbery...
+  # utter_ask_robbery_number_of_people:
+  # - text: "How many people were there?"
+
+  utter_ask_robbery_any_injuries:
+    - text: "Was there any injury made?"
+
+  utter_ask_robbery_person_with_you:
+    - text: "Was there any other person with you?"
+
+
+  # Accident...
+  utter_ask_accident_vehicle_type:
+    - text: "Which vehicle was it?"
+
+  # utter_ask_accident_number_of_people:
+  # - text: "Approximately how many people were there?"
+
+  utter_ask_accident_number_of_death:
+    - text: "How many people were died?"
+
+  # Kidnapping...
+  utter_ask_kidnapping_your_presence:
+    - text: "At that time where were you?"
+
+  utter_ask_kidnapping_call_from_kidnapper:
+    - text: "Have you got any call from kidnapper?"
+
+  # utter_ask_kidnapping_ask_for_anything:
+  #   - text: "Is he demanded about anything or money?"
+  utter_ask_call_details:
+    - text: "Describe the call Conversation Please"
+
+  utter_ask_robbery_details:
+    - text: "Describe the Additional information for Robbery Please"
+
+  utter_ask_accident_details:
+    - text: "Describe the Additional information for Accident Please"
+
+  utter_please_rephrase:
+    - text: "I am sorry! But I didn't catch that. Please say it again."
+
+  utter_default:
+    - text: "I am sorry! But I didn't catch that. Please say it again."
+
+  
+  utter_submit_with_basic_user_details:
+    - text: "You have entered:\n
+
+              - Crime date: {crime_date}\n
+              - Crime time: {crime_time}\n
+              - Crime location: {crime_location}\n
+              - Suspected people: {suspected_people}\n
+              - Stolen things: {stolen_things}\n
+              - Stolen amount: {stolen_amount}\n
+              - State name: {sname}\n
+              - City name: {cname}\n
+              - Crime type: {crime_type}\n
+              - Injuries details: {injury_occured}\n
+              - Person along with: {people_with}\n
+              - Vehicle type: {vehicle_type}\n
+              - Number of people died: {number_people_died}\n
+              - Location of the person: {person_location}\n
+              - Kidnapper call details: {kidnapper_call}\n
+              - Call details: {call_details} \n
+              - robbery details: {robbery_details}\n
+              - accident details: {accident_details}\n"
+
+              
+              # - Reporting date: {report_date}\n
+              # - Reporting time: {report_time}\n
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+
+forms:
+  basic_user_details_form:
+#    user_name:
+#      - type: from_entity
+#        entity: user_name
+    crime_date:
+      - type: from_entity
+        entity: crime_date
+    crime_time:
+      - type: from_entity
+        entity: crime_time
+    # report_date:
+    #   - type: from_entity
+    #     entity: report_date
+    # report_time:
+    #   - type: from_entity
+    #     entity: report_time
+    sname:
+      - type: from_entity
+        entity: sname
+    cname:
+      - type: from_entity
+        entity: cname
+    crime_location:
+      - type: from_entity
+        entity: crime_location
+    suspected_people:
+      - type: from_entity
+        entity: suspected_people
+    # stolen_things:
+    #   - type: from_entity
+    #     entity: stolen_things
+    # stolen_amount:
+    #   - type: from_entity
+    #     entity: stolen_amount
+    # crime_type:
+    #   - type: from_entity
+    #     entity: crime_type
+
+  kidapping_details_form:
+    call_details:
+      - type: from_text
+        # intent: details_kidnapper_ask_ransom
+    
+  robbery_details_form:
+    robbery_details:
+      - type: from_text
+        # intent: details_kidnapper_ask_ransom
+
+  accident_details_form:
+    accident_details:
+      - type: from_text
+        # intent: details_kidnapper_ask_ransom
+    
+
+slots:
+#  user_name:
+#    type: text
+#    auto_fill: false
+#    influence_conversation: false
+  crime_date:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  crime_time:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  # report_date:
+  #   type: text
+  #   auto_fill: false
+  #   influence_conversation: false
+  # report_time:
+  #   type: text
+  #   auto_fill: false
+  #   influence_conversation: false
+  crime_location:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  suspected_people:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  stolen_things:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  stolen_amount:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  crime_type:
+    type: text
+    # auto_fill: false
+    # influence_conversation: true
+  sname:
+    type: any
+    influence_conversation: false
+  cname:
+    type: any
+    influence_conversation: false
+  injury_occured:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  people_with:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  vehicle_type:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  number_people_died:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  person_location:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  kidnapper_call:
+    type: text
+    # auto_fill: false
+    # influence_conversation: false
+  # ransom_demand:
+  #   type: text
+  #   # auto_fill: false
+  #   # influence_conversation: false
+
+  call_details:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  
+  robbery_details:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  
+
+  accident_details:
+    type: text
+    auto_fill: false
+    influence_conversation: false
+  
+    
+
+

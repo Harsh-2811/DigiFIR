@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en-In">
+
+<head>
+    <link rel="stylesheet" href="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.css" />
+  </head>
+  <body>
+    <div class="chat-container"></div>
+  
+    <script src="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.js"/></script>
+    <script type="text/javascript">
+      var chatroom = new window.Chatroom({
+        host: "http://localhost:5005",
+        title: "DigiFIR - a virtual cop system",
+        container: document.querySelector(".chat-container"),
+        welcomeMessage: "Hello! Keep calm. I am DigiFIR your virtual FIR officer. Please provide all the necessary details with maximum accuracy.",
+        speechRecognition: "en-In",
+        voiceLang: "en-In"
+      });
+      chatroom.openChat();
+    </script>
+  </body>

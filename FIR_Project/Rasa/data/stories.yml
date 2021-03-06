@@ -1,0 +1,164 @@
+version: "2.0"
+
+stories:
+
+# - story: get basic details
+#   steps:
+#     - intent: request_user_details
+#     - action: basic_user_details_form
+#     - active_loop: basic_user_details_form
+#     - active_loop: null
+#     - action: utter_submit_with_basic_user_details
+#     - action: utter_submit_ask
+#     - intent: affirm
+#     - action: action_submit_data
+#     - action: action_slot_reset_demo
+
+    # .........................................................................................
+
+- story: story for robbery
+  steps:
+  - intent: request_user_details
+  - action: basic_user_details_form
+  - active_loop: basic_user_details_form
+  - active_loop: null
+  - action: utter_ask_crime_type
+  - intent: crime_theft
+    entities:
+    - crime_type: "theft"
+  - slot_was_set:
+      - crime_type: "theft"
+  # - action: utter_taken_crime_type
+  # - action: utter_ask_robbery_number_of_people
+  # - intent: details_number_of_people
+  #   entities:
+  #   - number_people: "5"
+  # - slot_was_set:
+  #     - number_people: "5"
+  - action: utter_ask_stolen_things
+  - intent: stolen_things_list
+  - action: utter_ask_stolen_amount
+  - intent: stolen_amount_list  
+  - action: utter_ask_robbery_any_injuries
+  - intent: details_about_injuries
+    entities:
+    - injury_occured: "beaten by stick"
+  - slot_was_set:
+      - injury_occured: "beaten by stick"
+  - action: robbery_details_form
+  - active_loop: robbery_details_form
+  - active_loop: null
+  # - action: utter_submit_with_basic_user_details
+  - action: action_submit_data
+  # - action: utter_ask_robbery_person_with_you
+  # - intent: details_about_person_with_you
+  #   entities:
+  #   - people_with: "Nirav Limbani and Savan Budheliya"
+  # - slot_was_set:
+  #     - people_with: "Nirav Limbani and Savan Budheliya"
+  # - action: utter_submit_with_basic_user_details
+
+
+
+# Accident...
+- story: story for accident
+  steps:
+  - intent: request_user_details
+  - action: basic_user_details_form
+  - active_loop: basic_user_details_form
+  - active_loop: null
+  - action: utter_ask_crime_type
+  - intent: crime_accident
+    entities:
+    - crime_type: "accident"
+  - slot_was_set:
+      - crime_type: "accident"
+  # - action: utter_taken_crime_type
+  - action: utter_ask_accident_vehicle_type
+  - intent: details_vehicle_type
+    entities:
+    - vehicle_type: "truck"
+  - slot_was_set:
+      - vehicle_type: "truck"
+  # - action: utter_ask_accident_number_of_people
+  # - intent: details_number_of_people
+  #   entities:
+  #   - number_people: "5"
+  # - action: utter_ask_accident_number_of_death
+  - intent: details_number_of_people_died
+    entities:
+    - number_people_died: "3"
+  - slot_was_set:
+      - number_people_died: "3"
+  - action: accident_details_form
+  - active_loop: accident_details_form
+  - active_loop: null
+  - action: utter_submit_with_basic_user_details
+  - action: action_submit_data
+
+#********************************************************************************************************************************
+
+
+# Kidnapping... Positive
+- story: story for kidnapping positive
+  steps:
+  - intent: request_user_details
+  - action: basic_user_details_form
+  - active_loop: basic_user_details_form
+  - active_loop: null
+  - action: utter_ask_crime_type
+  - intent: crime_kidnapping
+    entities:
+    - crime_type: "kidnapping"
+  - slot_was_set:
+      - crime_type: "kidnapping"
+  # - action: utter_taken_crime_type
+  - action: utter_ask_kidnapping_your_presence
+  - intent: details_person_location
+    entities:
+    - person_location: "office"
+  - slot_was_set:
+      - person_location: "office"
+  - action: utter_ask_kidnapping_call_from_kidnapper
+  - intent: details_kidnapper_call
+    entities:
+    - kidnapper_call: "yes kidnapper has called"
+  - slot_was_set:
+      - kidnapper_call: "yes kidnapper has called"
+  - action: kidapping_details_form
+  - active_loop: kidapping_details_form
+  - active_loop: null  
+  # - action: utter_ask_kidnapping_ask_for_anything
+  # - intent: details_kidnapper_ask_ransom
+  #   entities:
+  #   - ransom_demand: "asked for 10 lacs rupees"
+  # - slot_was_set:
+  #     - ransom_demand: "asked for 10 lacs rupees"
+  # - action: utter_submit_with_basic_user_details
+  - action: action_submit_data
+
+
+# Kidnapping... Negative
+- story: story for kidnapping negative
+  steps:
+  - intent: request_user_details
+  - action: basic_user_details_form
+  - active_loop: basic_user_details_form
+  - active_loop: null
+  - action: utter_ask_crime_type
+  - intent: crime_kidnapping
+    entities:
+    - crime_type: "kidnapping"
+  - slot_was_set:
+      - crime_type: "kidnapping"
+  # - action: utter_taken_crime_type
+  - action: utter_ask_kidnapping_your_presence
+  - intent: details_person_location
+    entities:
+    - person_location: "office"
+  - slot_was_set:
+      - person_location: "office"
+  - action: utter_ask_kidnapping_call_from_kidnapper
+  - intent: deny
+  # - action: utter_submit_with_basic_user_details
+  - action: action_submit_data
