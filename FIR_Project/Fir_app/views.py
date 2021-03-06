@@ -1,4 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect
+from django.http import HttpRequest
 import json
 from django.core import serializers
 import random
@@ -20,6 +21,9 @@ sessions_dict={}
 from django.conf import settings
 from math import cos, asin, sqrt
 import csv
+
+
+
 def csv_html(request):
     csv_fp = open(f'D:\Django\DigiFIR\FIR_Project\media\State.csv', 'r')
     reader = csv.DictReader(csv_fp)
@@ -68,7 +72,7 @@ def latlong(request):
         station = Police_Station_data.objects.get(latitude = cls_dst['lat'],longitude=cls_dst['lon'])
         print(station.main_area)
 
-        return HttpResponse('Data Got')
+        return HttpResponse(station.sho.username)
     return render(request,"Fir_app/latlong.html")
 
 def signinpage(request):
@@ -264,11 +268,12 @@ def DashBoard_police(request):
     if request.session.has_key('police'):
         delta = timedelta(minutes=1)
        # end_time =request.user.police_data.duty_end_time
-
-        end_time=datetime.datetime.strptime(str(request.user.police_data.duty_end_time), "%H:%M:%S") - timedelta(minutes=1)
-        print(end_time.time())
-        firs = Fir.objects.filter(report_time__gte = request.user.police_data.duty_start_time,report_time__lte=str(end_time.time()),station=request.user.police_data.sho_id)
-        param={'my_firs':firs}
+        print(request.session['police'])
+        pdata = Police_data.objects.get(user__id=request.session['police'])
+        end_time=datetime.datetime.strptime(str(pdata.duty_end_time), "%H:%M:%S") - timedelta(minutes=1)
+        print(pdata.sho_id.station_name)
+        firs = Fir.objects.filter(report_time__gte = pdata.duty_start_time,report_time__lte=str(end_time.time()),station=pdata.sho_id.station_name)
+        param={'my_firs':firs,'sho':pdata.sho_id}
         print(firs)
 
         return render(request,"Fir_app/PoliceDashBoard.html",param)
@@ -409,9 +414,9 @@ def update_police(request,id):
 def firregistration(request):
     if request.session.has_key('victim'):
         if request.method == "POST":
-            state_id = request.POST['state']
-            city_id = request.POST['city']
-            station_id = request.POST['police_station']
+            state= request.POST['state']
+            city = request.POST['city']
+            station = request.POST['police_station']
             sho = request.POST['sho_name']
             crime_date = request.POST['crime_date']
 
@@ -420,21 +425,19 @@ def firregistration(request):
             report_time = datetime.datetime.today().time()
             crime_location = request.POST['crime_loc']
             suspected_people = request.POST['suspected_people']
-            reason_for_fir_delay = request.POST['reason_for_fir_delay']
+            reason_for_fir_delay = "None"
             stolen_things = request.POST.get('stolen_things', '')
             stolen_amt = request.POST.get('stolen_amt', '')
 
             extra_points = request.POST.get('extra_points', '')
-            state=states.objects.get(id=state_id)
-            city1=city.objects.get(id=city_id)
-            station=Police_Station_data.objects.get(sho__id=station_id)
-            status = 0
+
+            status =0
             try:
-                fir = Fir(user=request.user.userdata, state=state, city=city1, station=station, sho_name=sho,
+                fir = Fir(user=request.user.userdata, state=state, city=city, station=station, sho_name=sho,
                           crime_date=crime_date, crime_time=crime_time, report_date=report_date,
                           report_time=report_time, crime_location=crime_location, suspected_people=suspected_people,
                           reasone_for_firdelay=reason_for_fir_delay, stolen_things=stolen_things,
-                          stolen_amount=float(stolen_amt),
+                          stolen_amount=stolen_amt,
                           additional_info=extra_points,status=status)
                 fir.save()
                 messages.success(request,"Your Fir is Successfully Registered")
@@ -446,10 +449,14 @@ def firregistration(request):
 
         current_time = datetime.datetime.now().time()
 
-        return render(request, 'Fir_app/registerFIR.html',
-                      {'states': sts, 'today_date': today_date, 'current_time': current_time})
+        return render(request, 'Fir_app/registerFIR.html',{'today_date':today_date,'current_time':current_time})
 
+def firform(request):
+    today_date = datetime.datetime.today().date()
 
+    current_time = datetime.datetime.now().time()
+
+    return render(request, 'Fir_app/registerFIR.html', {'today_date': today_date, 'current_time': current_time})
 def fetchstation(request):
     city=request.GET['city']
     stations = Police_Station_data.objects.filter(city=city)
@@ -481,26 +488,23 @@ def fetchfirdata(request):
         print(id)
 
         fir=Fir.objects.get(id=id)
-        state=states.objects.get(id=fir.state.id)
-        print(state)
-        city1=city.objects.get(id=fir.city.id)
-        station=Police_Station_data.objects.get(sho__id=fir.station.sho.id)
-        fir=serializers.serialize('json',[fir,])
 
-        resp=json.dumps({'msg':'success','fir':fir,'state':state.name,'city':city1.name,'station':station.station_name})
+        fir1=serializers.serialize('json',[fir,])
+
+        resp=json.dumps({'msg':'success','fir':fir1,'state':fir.state,'city':fir.city,'station':fir.station})
         return HttpResponse(resp)
 
     if request.session.has_key('police'):
         id=request.GET['id']
         print(id)
 
-        fir=Fir.objects.get(id=id)
-        state=states.objects.get(id=fir.state.id)
-        print(state)
-        city1=city.objects.get(id=fir.city.id)
-        station=Police_Station_data.objects.get(sho__id=fir.station.sho.id)
-        fir=serializers.serialize('json',[fir,])
-        resp=json.dumps({'msg':'success','fir':fir,'state':state.name,'city':city1.name,'station':station.station_name})
+        fir1=Fir.objects.get(id=id)
+
+
+        station=Police_Station_data.objects.get(station_name=fir1.station)
+        print(station.sho.id)
+        fir=serializers.serialize('json',[fir1,])
+        resp=json.dumps({'msg':'success','fir':fir,'state':fir1.state,'city':fir1.city,'station':station.station_name,'s_id':station.sho.id})
         return HttpResponse(resp)
 
 
@@ -516,4 +520,15 @@ def sendtoblockchain(request):
         return HttpResponse(resp)
 
 def Rasa(request):
+    if not request.user.userdata.is_approved:
+        return HttpResponse("<h1>Your Profile is not Approved yet</h1>")
     return render(request,"Fir_app/Rasa.html")
+
+@csrf_exempt
+def fetchbypincode(request):
+    if request.method == "POST":
+        pincode = request.POST['pincode']
+        station = Police_Station_data.objects.filter(pincode="395001").first()
+        print(station)
+        data = json.dumps({'msg': 'Success', 'station': station.station_name,'sho':station.sho.username})
+        return HttpResponse(data)

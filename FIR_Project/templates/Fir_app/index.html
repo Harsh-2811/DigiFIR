@@ -239,26 +239,26 @@
                     
                     {% if user.is_authenticated %}
 
-                    {% if victim or user.is_superuser %}
+                    {% if victim %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/firregistration/"><span class="links">Register FIR <i class="fa fa-drivers-license-o" style="color: #283990;"></i> </span> </a>
+                        <a class="nav-link" href="/rasa/"><span class="links">Register FIR <i class="fa fa-drivers-license-o" style="color: #283990;"></i> </span> </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard_user/"><span class="links">My Profile <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
                     </li>
                     {% endif %}
-                    {% if sho or user.is_superuser%}
+                    {% if sho%}
                         <li class="nav-item">
                         <a class="nav-link" href="/dashboard_sho/"><span class="links">Sho Dashboard <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
                     </li>
                     {% endif %}
-                    {% if police or user.is_superuser%}
+                    {% if police %}
                         <li class="nav-item">
                         <a class="nav-link" href="/dashboard_police/"><span class="links">Police Dashboard <i class="fa fa-user" style="color: #283990;"></i> </span> </a>
                     </li>
                     {% endif %}
                     {% if victim %}
-                        <button class="btn btn-danger " id="latlong">In Danger</button>
+                        <button class="btn btn-danger " id="latlong" style="display:none">In Danger</button>
                     {% endif %}
                     <li class="nav-item dropdown">
 
@@ -334,7 +334,7 @@
 <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
 
   <script>
-      var address;
+      var district,subdistrict="";
       function getaddress(){
 
         var platform = new H.service.Platform({
@@ -349,8 +349,36 @@
                     at: position.coords.latitude + "," + position.coords.longitude
                 }, data => {
                     console.log(data.items[0])
-                    alert(data.items[0].address.district + data.items[0].address.subdistrict);
+                    if(data.items[0].address.district != undefined)
+                        district = data.items[0].address.district ;
+                    if(data.items[0].address.subdistrict != undefined)
+                        subdistrict=  data.items[0].address.subdistrict;
 
+                     var pincode= data.items[0].address.postalCode;
+                    console.log(district,subdistrict,pincode)
+
+                    $.ajax('latlong/', {
+
+                    type: 'POST',  // http method
+                    data : datavalue,
+                    success: function (data, status, xhr) {
+
+                        alert("Your Request Sent to Nearest Police station")
+                        chatSocket.send(JSON.stringify({
+
+                    'district': district,
+                    'subdistrict': subdistrict,
+                    'code': 'new_message',
+                    'username':username,
+                    'sho_uname':data,
+                    'name': "{{ user.userdata.firstname }}"
+                    }));
+
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                            alert(errorMessage);
+                    }
+                    });
                 }, error => {
                     console.error(error);
                 }
@@ -360,6 +388,9 @@
         console.error("Geolocation is not supported by this browser!");
     }
       }
+
+
+      
   {%  if user.is_authenticated %}
      username = "{{ user.username }}" ;
     console.log(username)
@@ -378,19 +409,7 @@
                         longitude : longitude
                     }
                     getaddress();
-             $.ajax('latlong/', {
-
-                    type: 'POST',  // http method
-                    data : datavalue,
-                    success: function (data, status, xhr) {
-
-                        alert(data);
-
-                    },
-                    error: function (jqXhr, textStatus, errorMessage) {
-                             alert(errorMessage);
-                    }
-                });
+             
 
     },
     function error(msg) {alert('Please enable your GPS position feature.');},
@@ -403,14 +422,15 @@
         });
 
         console.log(window.location.host)
-        const roomName = {{room_id}}
+        
+        
         userName={{ userName }}
         console.log(window.location.host)
         const chatSocket = new WebSocket(
             'ws://'
             +window.location.host
-            + '/ws/diet_chat/'
-            + roomName
+            + '/ws/fir_app/'
+            + "alerts"
             + '/'
         );
 
@@ -429,20 +449,15 @@
             console.error('Chat socket closed unexpectedly');
         };
 
-        document.querySelector('#msg').focus();
-        document.querySelector('#msg').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#send').click();
-            }
-        };
+       
 
         document.querySelector('#send').onclick = function(e) {
             const messageInputDom = document.querySelector('#msg');
             const message = messageInputDom.value;
 
             chatSocket.send(JSON.stringify({
-                'latitude': data.latitude,
-                'longitude': data.longitude,
+                'district': district,
+                'subdistrict': subdistrict,
                 'code': 'new_message',
                 'username':username,
             }));

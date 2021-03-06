@@ -159,6 +159,7 @@ class Police_Station_data(models.Model):
     latitude = models.DecimalField(max_digits=30,decimal_places=10,blank=True,null=True,default=0.0)
     longitude = models.DecimalField(max_digits=30,decimal_places=10,blank=True,null=True,default=0.0)
 
+
     def __str__(self):
         return self.station_name
 
@@ -199,9 +200,9 @@ class ContactU(models.Model):
 class Fir(models.Model):
     id=models.AutoField(primary_key=True)
     user=models.ForeignKey(UserData,on_delete=models.CASCADE)
-    state = models.ForeignKey(states, on_delete=models.CASCADE)
-    city = models.ForeignKey(city, on_delete=models.CASCADE)
-    station=models.ForeignKey(Police_Station_data,on_delete=models.CASCADE)
+    state = models.CharField(max_length=20,default="")
+    city = models.CharField(max_length=20,default="")
+    station=models.CharField(max_length=20,default="")
     sho_name=models.CharField(default="",max_length=100)
     crime_date=models.DateField()
     crime_time=models.TimeField()
@@ -211,34 +212,14 @@ class Fir(models.Model):
     suspected_people=models.CharField(default="",max_length=300,blank=True,null=True)
     reasone_for_firdelay=models.CharField(default="",max_length=100,blank=True,null=True)
     stolen_things=models.CharField(default="",max_length=300,blank=True,null=True)
-    stolen_amount=models.DecimalField(default=0.0,max_digits=10,decimal_places=2,blank=True,null=True)
+    stolen_amount=models.CharField(default=0.0,max_length=30,blank=True,null=True)
 
-    additional_info=models.CharField(default="",max_length=300,blank=True,null=True)
+    additional_info=models.CharField(default="",max_length=800,blank=True,null=True)
     status=models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.firstname
 
-class dummy_fir(models.Model):
-    first_name=models.CharField(max_length=100,default="")
-    middle_name=models.CharField(max_length=100,default="")
-    last_name=models.CharField(max_length=100,default="")
-    dob=models.DateField(blank=True,null=True)
-    type=models.CharField(max_length=100,default="")
-
-    def __str__(self):
-        return self.first_name
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=100,default="")
-    p_id = models.ForeignKey('self',blank=True,null= True,on_delete=models.DO_NOTHING,related_name="Children")
-
-    def __str__(self):
-        if self.p_id:
-            return self.p_id.name
-        else:
-            return "Main Parent"
 
 class Alerts(models.Model):
     user= models.ForeignKey(UserData,on_delete=models.CASCADE)

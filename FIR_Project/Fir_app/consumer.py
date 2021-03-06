@@ -1,7 +1,7 @@
 import json
 from asgiref.sync import async_to_sync, sync_to_async
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
-from .models import Alerts
+from .models import Alerts,UserData,Police_Station_data
 from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
 from django.core import serializers
@@ -28,33 +28,42 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
+    def save_alert(self):
+        udta = UserData.objects.get(user__username=self.username)
+        station = Police_Station_data.objects.get(sho__username=self.sho)
+        alerts = Alerts(user=udta, main_area=self.subdistrict + " " + self.district, station=station)
+        alerts.save()
 
 
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         if text_data_json['code'] == 'new_message':
-            latitude = text_data_json['latitude']
-            longitude = text_data_json['longitude']
+            district = text_data_json['district']
+            subdistrict = text_data_json['subdistrict']
             username = text_data_json['username']
+            sho = text_data_json['sho_uname']
 
-
-            self.latitude = latitude
-            self.longitude = longitude
-
+            print(username)
+            self.username=username
+            self.sho=sho
+            self.district = district
+            self.subdistrict = subdistrict
 
             # print(room)
 
-            # await database_sync_to_async (self.save_message)()
+            await database_sync_to_async (self.save_alert)()
 
             # Send message to room group
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
                     'type': 'chat_message',
-                    'longitude': longitude,
-                    'latitude':latitude,
+                    'district': district,
+                    'subdistrict':subdistrict,
                     'code': text_data_json['code'],
+                    'sho':sho,
+                    'name':text_data_json['name'],
                 }
             )
 
@@ -63,13 +72,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
         if event['code'] == "new_message":
-            message = event['message']
-            name=event['name']
-            room_id=event['room']
-            # Send message to WebSocket
+
             await self.send(text_data=json.dumps({
-                'message': message,
-                'name':name,
-                'room': room_id,
-                'code':event['code']
+                'message':'Message Sent',
+                'sho':event['sho'],
+                'district':event['district'],
+                'subdistrict':event['subdistrict'],
+                'name':event['name'],
             }))

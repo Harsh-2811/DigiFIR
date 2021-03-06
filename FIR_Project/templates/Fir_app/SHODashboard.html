@@ -252,9 +252,11 @@
                                     <th>Stolen Things</th>
                                     <th>Stolen Amount</th>
                                     <th>Death Report No</th>
-                                    <th>Steps taken</th>
+                                    <th>Actions taken</th>
                                     <th>Extra Details</th>
                                     <th>Court Send Date</th>
+                                    <th>Add Remark</th>
+
 
 
                                 </tr>
@@ -305,6 +307,76 @@
         </div>
     </section>
 
+	<div class="modal fade" id="remarks" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header " style="background-color: #283990; color: #fff;">
+                    <h5 class="modal-title ">Fir id : <span id="remarkspanid">ID</span></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+						
+                        <div class="row">
+                            <div class="col-12 text-center h4">
+                                Add remarks to this FIR
+                            </div>
+                        </div>
+						<div class="row">
+                            
+                            <div class="col-12 mt-3">
+                                <ul id="remarklist">
+                                   
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <form >
+                                    <div class="form-group">
+                                        <label for="remarktext" class="h5">Add Remark:</label>
+                                        <textarea class="form-control" rows="3" id="remarktext"></textarea>                                    </div>
+										<input type="hidden" id="remarkid">
+									<button type="button" class="btn mx-2" id="remarkbtn">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div class="modal fade" id="viewsteps" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header " style="background-color: #283990; color: #fff;">
+                    <h5 class="modal-title ">Fir id : <span id="addstepspanid">ID</span></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 text-center h4">
+                                Steps taken by investigation Officer.
+                            </div>
+                            <div class="col-12 mt-3">
+                                <ul id="viewstepslist">
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         $(document).ready(function () {
             $("#userFIR").collapse('show');
@@ -345,12 +417,7 @@
      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
 
      web3.eth.defaultAccount = web3.eth.accounts[0];
-     var abi=[
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
+	 var abi =[
 	{
 		"inputs": [
 			{
@@ -467,9 +534,14 @@
 						"internalType": "string",
 						"name": "court_send_date",
 						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "remarks_by_sho",
+						"type": "string[]"
 					}
 				],
-				"internalType": "struct FirInfoV2.FIR",
+				"internalType": "struct FirInfoV4.FIR",
 				"name": "_fir",
 				"type": "tuple"
 			}
@@ -506,6 +578,24 @@
 			},
 			{
 				"internalType": "string",
+				"name": "_remarks_by_sho",
+				"type": "string"
+			}
+		],
+		"name": "addRemarksBySHO",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
 				"name": "_steps",
 				"type": "string"
 			}
@@ -513,6 +603,132 @@
 		"name": "addStepsTaken",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_fir_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getfir",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "fir_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "user_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "station_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "officer_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "ipc",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_time",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "report_time",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "police_station_diary_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "crime_location",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "suspected_people",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "reasone_delay_fir",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_things",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "stolen_ammount",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "death_report_no",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string[]",
+						"name": "steps_taken",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "details",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "court_send_date",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "remarks_by_sho",
+						"type": "string[]"
+					}
+				],
+				"internalType": "struct FirInfoV4.FIR",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -621,9 +837,14 @@
 						"internalType": "string",
 						"name": "court_send_date",
 						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "remarks_by_sho",
+						"type": "string[]"
 					}
 				],
-				"internalType": "struct FirInfoV2.FIR[]",
+				"internalType": "struct FirInfoV4.FIR[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -737,9 +958,14 @@
 						"internalType": "string",
 						"name": "court_send_date",
 						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "remarks_by_sho",
+						"type": "string[]"
 					}
 				],
-				"internalType": "struct FirInfoV2.FIR[]",
+				"internalType": "struct FirInfoV4.FIR[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -853,134 +1079,27 @@
 						"internalType": "string",
 						"name": "court_send_date",
 						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "remarks_by_sho",
+						"type": "string[]"
 					}
 				],
-				"internalType": "struct FirInfoV2.FIR[]",
+				"internalType": "struct FirInfoV4.FIR[]",
 				"name": "",
 				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_fir_id",
-				"type": "uint256"
-			}
-		],
-		"name": "getfir",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "fir_id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "user_id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "station_id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "officer_id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string[]",
-						"name": "ipc",
-						"type": "string[]"
-					},
-					{
-						"internalType": "string",
-						"name": "crime_date",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "crime_time",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "report_date",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "report_time",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "police_station_diary_no",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "crime_location",
-						"type": "string"
-					},
-					{
-						"internalType": "string[]",
-						"name": "suspected_people",
-						"type": "string[]"
-					},
-					{
-						"internalType": "string",
-						"name": "reasone_delay_fir",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "stolen_things",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "stolen_ammount",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "death_report_no",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string[]",
-						"name": "steps_taken",
-						"type": "string[]"
-					},
-					{
-						"internalType": "string",
-						"name": "details",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "court_send_date",
-						"type": "string"
-					}
-				],
-				"internalType": "struct FirInfoV2.FIR",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
 	}
 ]
-     var CoursetroContract = new web3.eth.Contract(abi,'0x237f0410770a95301fDa7dF8a588259Ee65Fa344')
+   
+
+
+    var CoursetroContract = new web3.eth.Contract(abi,'0x686a86503cFbb586b591aDF85D739309199E5F10')
+
 
     var user_id1={{user.id}};
 
@@ -1041,15 +1160,29 @@
                     stolen_things.innerHTML = answer[i].stolen_things
                     row.appendChild(stolen_things)
                     var stolen_amount = document.createElement("td");
-                    stolen_amount.innerHTML = answer[i].stolen_amount
+                    stolen_amount.innerHTML = answer[i].stolen_ammount
                     row.appendChild(stolen_amount)
 
 
                     var death_report_no = document.createElement("td");
                     death_report_no.innerHTML =answer[i].death_report_no
                     row.appendChild(death_report_no)
-                    var steps_taken = document.createElement("td");
-                    steps_taken.innerHTML = answer[i].steps_taken
+					var steps_taken = document.createElement("td");
+                    var add_steps= document.createElement("button");
+                   
+                    
+                   add_steps.className ="stepsbtn";
+                   add_steps.className +=  " btn";
+                   add_steps.className +=  " w-58";
+                   add_steps.id = answer[i].fir_id;
+                   add_steps.setAttribute("type","button");
+                   add_steps.setAttribute("onclick","seesteps(this.id)");
+                   
+                   
+                   
+
+                   add_steps.innerHTML = '<i class="fa fa-book" aria-hidden="true"></i>';
+                   steps_taken.appendChild(add_steps)
                     row.appendChild(steps_taken)
                     var details = document.createElement("td");
                     details.innerHTML = answer[i].details
@@ -1057,13 +1190,114 @@
                     var court_send_date = document.createElement("td");
                     court_send_date.innerHTML =answer[i].court_send_date
                     row.appendChild(court_send_date)
+
+					var remarks = document.createElement("td");
+                    var add_remarks= document.createElement("button");
+                   
+                    
+					add_remarks.className ="add_remarks";
+					add_remarks.className +=  " btn";
+					add_remarks.className +=  " w-58";
+					add_remarks.id = answer[i].fir_id;
+					add_remarks.setAttribute("type","button");
+					add_remarks.setAttribute("onclick","add_remarks(this.id)");
+                   
+                   
+                   
+
+					add_remarks.innerHTML = '<i class="fa fa-edit" aria-hidden="true"></i>';
+                   remarks.appendChild(add_remarks)
+
+						row.appendChild(remarks);
+
                     $("#accptedFirbody").append(row);
                 }
                  $('#tbluserFIR').DataTable({
                 "scrollX": true,
 
             });
-            })
+            });
+			function seesteps(id) {
+               var onefir={}
+            CoursetroContract.methods.getfir(parseInt(id)).call().then(function(onefir){
+                console.log(id);
+                $("#viewstepslist").empty();
+                    for(var i=1;i<onefir.steps_taken.length;i++){
+                        $("#viewstepslist").append(`<li>${onefir.steps_taken[i]}</li>`);
+
+                    }
+                    $("#addstepspanid").html(id);
+
+                    $("#viewsteps").modal();
+
+
+                   
+             } )
+            }
+			function add_remarks(id) {
+				console.log(id)
+               var onefir={}
+			   CoursetroContract.methods.getfir(parseInt(id)).call().then(function(onefir){
+                    console.log(id);
+                    $("#remarklist").empty();
+                    for(var i=1;i<onefir.remarks_by_sho.length;i++)
+                    {
+                        $("#remarklist").append(`<li>${onefir.remarks_by_sho[i]}</li>`);
+
+                    }
+                    
+                    $("#addsteps").modal();
+                    $("#steps_fir_id").val(id);
+
+
+                   
+             } )
+				$("#remarkid").val(id);
+				$("#remarkspanid").html(id);
+				$("#remarks").modal();
+
+            }
+			$("#remarkbtn").click(function(){
+				web3.eth.getAccounts().then(function(accounts){
+                var acc = accounts[0];
+                var remark = $("#remarktext").val();
+                
+                var id = parseInt($("#remarkid").val());
+				console.log(remark,id)
+                return CoursetroContract.methods.addRemarksBySHO(id,remark).send({from:acc,gasLimit:"600000"});
+            }).then(function(tx){
+                swal({
+                    title: "Submitted",
+                    text: "Your Remark are added successfully",
+                    icon: "success",
+                    });
+                    
+                console.log(tx)
+                
+                
+            }).catch(function(tx){
+                console.log(tx)
+            })				
+			});
+
+			function addsteps(id) {
+               var onefir={}
+            CoursetroContract.methods.getfir(parseInt(id)).call().then(function(onefir){
+                    console.log(id);
+                    $("#viewstepslist").empty();
+                    for(var i=1;i<onefir.steps_taken.length;i++)
+                    {
+                        $("#stepslist").append(`<li>${onefir.steps_taken[i]}</li>`);
+
+                    }
+                    
+                    $("#addsteps").modal();
+                    $("#steps_fir_id").val(id);
+
+
+                   
+             } )
+            }
 
 </script>
 

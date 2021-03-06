@@ -24,8 +24,10 @@ urlpatterns = [
     path("logout/", views.logoutprocess, name="contact"),
     path("emailchecking/", views.emailcheck, name="emailcheck"),
     path("firregistration/", views.firregistration, name="firregistration"),
+    path("firform/", views.firform, name="firform"),
     path("fetchfirdata/", views.fetchfirdata, name="fetchfirdata"),
     path("sendtoblockchain/", views.sendtoblockchain, name="sendtoblockchain"),
+    path("fetchbypincode/", views.fetchbypincode, name="fetchbypincode"),
     path('rasa/', views.Rasa)
 
 ]

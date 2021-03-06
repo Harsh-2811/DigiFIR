@@ -97,7 +97,7 @@
                                         <label for="fir_u_id">User ID</label>
                                     </div>
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <input type="text" class="form-control" id="fir_u_id" disabled value="{{user.id}}"
+                                        <input type="text" class="form-control" id="fir_u_id"  value="{{user.id}}"
                                             required>
                                     </div>
                                 </div>
@@ -106,12 +106,14 @@
                                         <label for="fir_state">Select State</label>
                                     </div>
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <select class="form-control" id="fir_state" name="state" required>
+                                       <!-- <select class="form-control" id="fir_state" name="state" required>
                                             <option value="">Select State</option>
                                             {% for st in states %}
                                                 <option value="{{st.id}}">{{st.name}}</option>
                                             {% endfor %}
-                                        </select>
+                                        </select>-->
+                                        <input type="text" class="form-control" id="fir_state" name="state"  
+                                        required>
                                     </div>
                                 </div>
                                 <div class="row mt-lg-2">
@@ -119,19 +121,17 @@
                                         <label for="fir_city">Select City</label>
                                     </div>
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <select class="form-control" id="fir_city" name="city" required>
-                                            <option value="">Select City</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="fir_city" name="city"  
+                                        required>
                                     </div>
                                 </div>
                                 <div class="row mt-lg-2">
                                     <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
-                                        <label for="fir_police_station">Select Police Station</label>
+                                        <label for="fir_station">Select Police Station</label>
                                     </div>
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <select class="form-control" id="fir_police_station" name="police_station" required>
-                                            <option value="">Select Police Station</option>
-                                        </select>
+                                        <input type="text" class="form-control" id="fir_station" name="police_station" 
+                                        required>
                                     </div>
                                 </div>
                                 <div class="row mt-lg-2">
@@ -139,10 +139,9 @@
                                         <label for="fir_sho_name">SHO Officer Name</label>
                                     </div>
 
-                                        <input type="hidden" class="form-control" id="fir_sho_name_hidden" name="sho_name" required>
-
+                                       
                                     <div class="col-lg-6 col-md-9 col-sm-12">
-                                        <input type="text" class="form-control" id="fir_sho_name"  disabled
+                                        <input type="text" class="form-control" id="fir_sho_name"   name="sho_name"
                                             required>
                                     </div>
                                 </div>
@@ -198,7 +197,7 @@
                                             required></textarea>
                                     </div>
                                 </div>
-                                <div class="row mt-lg-2">
+                                <div class="row mt-lg-2" style="display: none;">
                                     <div class="col-lg-3 col-md-12 col-sm-12 text-lg-right text-md-left text-sm-left">
                                         <label for="fir_reason_delay">Reason for Delay FIR</label>
                                     </div>
@@ -239,6 +238,9 @@
                                     <button type="submit" class="btn ">
                                         <h5 style="margin:auto">Submit</h5>
                                     </button>
+                                    <button type="button" class="btn btn-warning" id="clear">
+                                        <h5 style="margin:auto">Clear Data</h5>
+                                    </button>
                                 </div>
                         </form>
 
@@ -249,106 +251,97 @@
     </section>
 {% endblock %}
 
+ {% block escript%}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
+{% endblock%}
 
 {% block script%}
 
-$( "#fir_police_station" ).change(function() {
+var pincode = "";
 
- var station=$("#fir_police_station").val();
+if(localStorage.getItem('fir') != null){
+    var fir_data = JSON.parse(localStorage.getItem('fir'))
+$("#fir_crime_location").val(fir_data["Enter crime place."]);
+delete fir_data['Enter crime place.']
+$("#fir_state").val(fir_data["Enter state name."]);
+delete fir_data["Enter state name."]
 
-   datatopass={"station":station}
-     $.ajax({
-  type: "GET",
-  url: "/fetchsho",
-  data: datatopass,
-  success: function(msg){
-      msg=JSON.parse(msg);
-      var resp= msg["sho"]
-      $("#fir_sho_name").val(resp['name']);
-      $("#fir_sho_name_hidden").val(resp['name']);
+var test = moment(fir_data['Enter date of crime.']).format('YYYY-MM-DD')
+console.log(moment(fir_data['Enter date of crime.']).format('DD-MM-YYYY'))
+$("#fir_crime_date").val(test)
 
-
-  },
-  error: function(XMLHttpRequest, textStatus, errorThrown) {
-     alert("some error");
-  }
+delete fir_data['Enter date of crime.']
+$("#fir_city").val(fir_data['Enter city name.']);
+delete fir_data['Enter city name.']
 
 
+$("#fir_suspected_people").val(fir_data["Enter the names of suspected people."]);
+delete fir_data["Enter the names of suspected people."]
+$("#fir_stolen_things").val(fir_data["Which things were stolen during crime was happening?"]);
+delete fir_data["Which things were stolen during crime was happening?"]
+$("#fir_stolen_amount").val(fir_data["Enter the amount of money stolen."]);
+delete fir_data["Enter the amount of money stolen."]
+$("#fir_reason_delay").val('Nothing');
+delete fir_data["What is your user name?"];
+var add_info= "";
+pincode = fir_data["pincode"]
+console.log(pincode)
+delete fir_data["pincode"]
+
+var dt = moment(fir_data["Enter time of crime."], ["h:mm A"]).format("HH:mm");
+$("#fir_crime_time").val(dt);
+delete fir_data["Enter time of crime."];
+for (var key in fir_data) {
+    if (fir_data.hasOwnProperty(key)) {
+        
+        add_info += key +" : "+ fir_data[key]+ "\n";
+    }
+}
+
+$("#fir_extra_points").val(add_info)
+console.log(fir_data)
+$.ajax('/fetchbypincode/', {
+
+    type: 'POST',  // http method
+    data : {
+        pincode : pincode
+    },
+    success: function (data, status, xhr) {
+       console.log(data);
+       data = JSON.parse(data);
+       $("#fir_station").val(data.station);
+       $("#fir_sho_name").val(data.sho)
+       
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+            alert(errorMessage);
+    }
+    });
+}
+$("#clear").click(function(){
+    localStorage.clear();
+    $("#fir_crime_location").val(" ");
+
+$("#fir_state").val(" ");
+
+$("#fir_crime_date").val(" ")
+
+$("#fir_city").val(" ");
+
+
+
+$("#fir_suspected_people").val(" ");
+
+$("#fir_stolen_things").val(" ");
+
+$("#fir_stolen_amount").val(" ");
+
+$("#fir_reason_delay").val(' ');
+
+$("#fir_crime_time").val(" ");
+
+
+$("#fir_extra_points").val(" ")
 });
-});
-
-
-$( "#fir_city" ).change(function() {
-   var ct=$("#fir_city").val();
-   datatopass={"city":ct}
-    $('#fir_police_station').empty()
-   $.ajax({
-  type: "GET",
-  url: "/fetchstation",
-  data: datatopass,
-  success: function(msg){
-      msg=JSON.parse(msg);
-      var resp= msg["stations"]
-      console.log(resp);
-               var o1=new Option();
-     $(o1).html("Select Police Station");
-        $(o1).val("");
-        $("#fir_police_station").append(o1);
-      for(var i=0;i <= resp.length;i++)
-      {
-        var o = new Option();
-        /// jquerify the DOM object 'o' so we can use the html method
-        $(o).html(resp[i]["name"]);
-        $(o).val(resp[i]["id"]);
-        $("#fir_police_station").append(o);
-      }
-  },
-  error: function(XMLHttpRequest, textStatus, errorThrown) {
-     alert("some error");
-  }
-});
-});
-
-
-$( "#fir_state" ).change(function() {
-
-   var st=$("#fir_state").val();
-    datatopass={"state":st}
-
-    $('#fir_city')
-    .empty()
-
-   $.ajax({
-  type: "GET",
-  url: "/fetchcity",
-  data: datatopass,
-  success: function(msg){
-      msg=JSON.parse(msg);
-      var resp= msg["cities"]
-      console.log(resp);
-             var o1=new Option();
-     $(o1).html("Select City");
-        $(o1).val("");
-        $("#fir_city").append(o1);
-      for(var i=0;i <= resp.length;i++)
-      {
-        var o = new Option();
-        /// jquerify the DOM object 'o' so we can use the html method
-        $(o).html(resp[i]["name"]);
-        $(o).val(resp[i]["id"]);
-        $("#fir_city").append(o);
-      }
-  },
-  error: function(XMLHttpRequest, textStatus, errorThrown) {
-     alert("some error");
-  }
-});
-});
-
-
-
-
-
-
 {% endblock %}

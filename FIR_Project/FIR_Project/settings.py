@@ -35,7 +35,7 @@ SESSION_ID=0
 INSTALLED_APPS = [
 
     'Fir_app',
-
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,8 +80,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'FIR_Project.wsgi.application'
+#WSGI_APPLICATION = 'FIR_Project.wsgi.application'
+ASGI_APPLICATION = "FIR_Project.routing.application"
+redis_host = os.environ.get('REDIS_HOST', '127.0.0.1')
+CHANNEL_LAYERS = {
+    'default': {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+
+    },
+}
 EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

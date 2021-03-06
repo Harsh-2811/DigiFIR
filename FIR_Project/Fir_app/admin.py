@@ -7,8 +7,7 @@ import requests
 
 URL = "https://geocode.search.hereapi.com/v1/geocode"
 
-# Register your models here.
-admin.site.register(Category)
+
 class myUserModel(ModelAdmin):
     list_display = ['username','email','is_police','is_sho','is_admin','is_user']
 admin.site.register(MyUser,myUserModel)
@@ -44,11 +43,6 @@ admin.site.register(Police_data)
 admin.site.register(states)
 admin.site.register(city)
 
-class dummy_fir_admin(admin.ModelAdmin):
-    def change_date_format(self,obj):
-        return obj.dob.strftime('%d-%m-%Y')
-    list_display = ('id','first_name','change_date_format')
-admin.site.register(dummy_fir,dummy_fir_admin)
 
 class FirAdmin(admin.ModelAdmin):
     save_as = True
@@ -66,7 +60,7 @@ class StudentAdmin(admin.ModelAdmin):
     save_on_top = True
     change_list_template = 'admin/change_list_graph.html'
 """
-
+admin.site.register(Alerts)
 #admin.site.register(Student, StudentAdmin)
 admin.site.site_header = "DigiFIR Admin"
 admin.site.site_title = "DigiFIR Admin Portal"
