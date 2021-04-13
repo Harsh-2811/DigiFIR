@@ -345,7 +345,7 @@
         
     </section>
 
-    <section class="mt-3" style="display:none">
+    <section class="mt-3" style="">
         <div class="container">
             <div class="col-4">
                 <button type="button" class="btn" id="btnalerts">Alerts</button>
@@ -356,37 +356,26 @@
                        <thead>
                             <tr>
                                
-                                <th>FIR no</th>
-                                <th>Victim FirstName</th>
-                                <th>Victim LastName</th>
-                                <th>Victim Aadhar Number</th>
-                                <th>Victim Passport Number</th>
-
-                                <th>Station Name</th>
-                                <th>Officer Name</th>
+                                <th>Username</th>
+                                <th>Main Area</th>
+                                <th>Police Station</th>
                                 <th>Date</th>
                                 <th>Time</th>
-                                <th>Status</th>
-                                <th>View Details</th>
 
                             </tr>
 
                         </thead>
                         <tbody>
-                        {% for fir in my_firs %}
+                        {% for alert in alerts %}
                             <tr>
 
-                                <td>{{fir.id}}</td>
-                                <td>{{fir.user.firstname}}</td>
-                                <td>{{fir.user.lastname}}</td>
-                                <td>{{fir.user.aadhar_no}}</td>
-                                <td>{{fir.user.passport_no}}</td>
-                                <td>{{fir.station}}</td>
-                               <td>{{fir.sho_name}}</td>
-                                <td>{{fir.crime_date}}</td>
-                                <td>{{fir.crime_time}}</td>
-                                <td>{{fir.status}}</td>
-                                <td><button class="btn show_more" id="{{fir.id}}"  style="width:60%;"><i class="fa fa-file-text" aria-hidden="true"></i></button>
+                                <td>{{alert.user.user.username}}</td>
+                                <td>{{alert.main_area}}</td>
+                                <td>{{alert.station.station_name}}</td>
+                                <td>{{alert.date}}</td>
+                                <td>{{alert.time}}</td>
+
+
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -1657,7 +1646,7 @@ var CoursetroContract = new web3.eth.Contract(abi,'0x686a86503cFbb586b591aDF85D7
                     $("#viewstepslist").empty();
                     for(var i=1;i<onefir.steps_taken.length;i++)
                     {
-                        $("#stepslist").append(`<li>${onefir.steps_taken[i]}</li>`);
+                        $("#viewstepslist").append(`<li>${onefir.steps_taken[i]}</li>`);
 
                     }
                     
@@ -1684,9 +1673,10 @@ var CoursetroContract = new web3.eth.Contract(abi,'0x686a86503cFbb586b591aDF85D7
                     text: "Your steps are added successfully",
                     icon: "success",
                     });
+                    $("#newsteps").val(" ");
                     location.reload();
                 console.log(tx)
-                
+
                 
             }).catch(function(tx){
                 console.log(tx)

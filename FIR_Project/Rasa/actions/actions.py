@@ -10,7 +10,7 @@
 from typing import Dict, Text, Any, List, Union, Optional
 from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_core_sdk.events import SlotSet, AllSlotsReset, ConversationPaused, ConversationResumed
+from rasa_sdk.events import SlotSet, AllSlotsReset, ConversationPaused, ConversationResumed
 from rasa_sdk.forms import FormAction
 from rasa_sdk.events import UserUtteranceReverted
 
@@ -37,23 +37,23 @@ class AllSlotsResetDemo(Action):
 
 
 
-class ActionDefaultFallback(Action):
-    """Executes the fallback action and goes back to the previous state
-    of the dialogue"""
+# class ActionDefaultFallback(Action):
+#     """Executes the fallback action and goes back to the previous state
+#     of the dialogue"""
 
-    def name(self) -> Text:
-        return "ACTION_DEFAULT_FALLBACK_NAME"
+#     def name(self) -> Text:
+#         return "ACTION_DEFAULT_FALLBACK_NAME"
 
-    async def run(
-        self,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: Dict[Text, Any],
-    ) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message(template="my_custom_fallback_template")
+#     async def run(
+#         self,
+#         dispatcher: CollectingDispatcher,
+#         tracker: Tracker,
+#         domain: Dict[Text, Any],
+#     ) -> List[Dict[Text, Any]]:
+#         dispatcher.utter_message(template="my_custom_fallback_template")
 
-        # Revert user message which led to fallback.
-        return [UserUtteranceReverted()]
+#         # Revert user message which led to fallback.
+#         return [UserUtteranceReverted()]
 
 
 

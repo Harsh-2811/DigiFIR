@@ -227,6 +227,7 @@ class Alerts(models.Model):
     station = models.ForeignKey(Police_Station_data,on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.firstname

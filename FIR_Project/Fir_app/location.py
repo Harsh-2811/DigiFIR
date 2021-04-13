@@ -15,6 +15,28 @@ longitude = data['items'][0]['position']['lng']
 
 print(latitude,longitude)"""
 from geopy.geocoders import Nominatim
-geolocator = Nominatim(user_agent="digifir")
-location = geolocator.reverse("21.2329613, 72.81608609999999")
-print(location.address)
+from geopy.exc import GeocoderTimedOut
+
+geolocator = Nominatim(user_agent="geoapiExercises")
+
+        # place input by geek
+place = "Hirabag"
+location = None
+def do_geocode(place, attempt=1, max_attempts=5):
+    try:
+        return geolocator.geocode(place)
+    except GeocoderTimedOut:
+        if attempt <= max_attempts:
+            return do_geocode(place, attempt=attempt+1)
+        raise
+
+location = do_geocode(place)
+# traverse the data
+data = location.raw
+loc_data = data['display_name'].split()
+
+postal = loc_data[-2]
+postal = postal[:-1]
+
+print(postal)
+

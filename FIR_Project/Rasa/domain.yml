@@ -9,6 +9,7 @@ intents:
   - mood_unhappy
   - bot_challenge
   - request_user_details
+
 #  - user_name_list
   - crime_date_list
   - crime_time_list
@@ -41,6 +42,8 @@ intents:
   - crime_kidnapping
   - details_person_location
   - details_kidnapper_call
+  - out_of_scope
+
   # - details_kidnapper_ask_ransom
 
 
@@ -67,7 +70,7 @@ entities:
   - call_details
   - robbery_details
   - accident_details
-
+  - out_of_scope
 actions:
   - action_slot_reset_demo
   - action_submit_data
@@ -87,7 +90,8 @@ actions:
   - kidapping_details_form
   - robbery_details_form
   - accident_details_form
-  - ACTION_DEFAULT_FALLBACK_NAME
+  - utter_ask_accident_number_of_death
+  # - ACTION_DEFAULT_FALLBACK_NAME
 
 
   
@@ -176,9 +180,10 @@ responses:
   utter_ask_accident_details:
     - text: "Describe the Additional information for Accident Please"
 
-  utter_please_rephrase:
-    - text: "I am sorry! But I didn't catch that. Please say it again."
-
+  # utter_please_rephrase:
+  #   - text: "I am sorry! But I didn't catch that. Please say it again."
+  utter_out_of_scope:
+    - text: Sorry, I didn't get what you said. Please rephrase what you said.
   utter_default:
     - text: "I am sorry! But I didn't catch that. Please say it again."
 

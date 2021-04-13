@@ -40,7 +40,7 @@ def closest(data, v):
     return min(data, key=lambda p: distance(v['lat'],v['lon'],p['lat'],p['lon']))
 
 def index(request):
-    print(settings.SESSION_ID)
+
     param={'victim':False,'police':False,'error':False,'sho':False}
     if request.session.has_key('victim'):
         param["victim"]= True
@@ -273,8 +273,10 @@ def DashBoard_police(request):
         end_time=datetime.datetime.strptime(str(pdata.duty_end_time), "%H:%M:%S") - timedelta(minutes=1)
         print(pdata.sho_id.station_name)
         firs = Fir.objects.filter(report_time__gte = pdata.duty_start_time,report_time__lte=str(end_time.time()),station=pdata.sho_id.station_name)
-        param={'my_firs':firs,'sho':pdata.sho_id}
-        print(firs)
+        alerts = Alerts.objects.filter(station = pdata.sho_id,status = False)
+        print(alerts)
+        param={'my_firs':firs,'sho':pdata.sho_id,'alerts':alerts}
+
 
         return render(request,"Fir_app/PoliceDashBoard.html",param)
     else:
@@ -525,10 +527,53 @@ def Rasa(request):
     return render(request,"Fir_app/Rasa.html")
 
 @csrf_exempt
-def fetchbypincode(request):
+def fetchpincode(request):
     if request.method == "POST":
-        pincode = request.POST['pincode']
-        station = Police_Station_data.objects.filter(pincode="395001").first()
-        print(station)
+        place = request.POST['place']
+
+        # import module
+        try:
+            from geopy.geocoders import Nominatim
+
+            # initialize Nominatim API
+            geolocator = Nominatim(user_agent="geoapiExercises")
+
+            # place input by geek
+            place = place
+            location = geolocator.geocode(place)
+
+            # traverse the data
+            data = location.raw
+            loc_data = data['display_name'].split()
+
+            postal = loc_data[-2]
+            postal = postal[:-1]
+            station = Police_Station_data.objects.filter(pincode=postal).first()
+            print(station)
+        except:
+            pass
+        station =None
+        katargam = ['Ambatalavadi','Dabholi','Singanpor']
+        varacha = ['Hirabag','Yogi Chowk','Singanpor']
+        athwa = ['Adajan','Vesu']
+
+        pincode = None
+        if place in katargam:
+            pincode = "395004"
+
+        if place in varacha:
+            pincode = "395006"
+
+        if place in athwa:
+            pincode = "395007"
+        station = Police_Station_data.objects.filter(pincode=pincode).first()
+
         data = json.dumps({'msg': 'Success', 'station': station.station_name,'sho':station.sho.username})
         return HttpResponse(data)
+
+
+def Phone(request):
+    if request.method == "POST":
+        data = request.POST.getlist('mytext[]','')
+        print(data)
+    return render(request,"Fir_app/Phone.html")

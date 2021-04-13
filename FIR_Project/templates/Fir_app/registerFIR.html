@@ -259,10 +259,11 @@
 {% block script%}
 
 var pincode = "";
-
+var crime_place = " ";
 if(localStorage.getItem('fir') != null){
     var fir_data = JSON.parse(localStorage.getItem('fir'))
 $("#fir_crime_location").val(fir_data["Enter crime place."]);
+crime_place = fir_data["Enter crime place."];
 delete fir_data['Enter crime place.']
 $("#fir_state").val(fir_data["Enter state name."]);
 delete fir_data["Enter state name."]
@@ -301,11 +302,11 @@ for (var key in fir_data) {
 
 $("#fir_extra_points").val(add_info)
 console.log(fir_data)
-$.ajax('/fetchbypincode/', {
+$.ajax('/fetchpincode/', {
 
     type: 'POST',  // http method
     data : {
-        pincode : pincode
+        place : crime_place
     },
     success: function (data, status, xhr) {
        console.log(data);

@@ -27,7 +27,9 @@ urlpatterns = [
     path("firform/", views.firform, name="firform"),
     path("fetchfirdata/", views.fetchfirdata, name="fetchfirdata"),
     path("sendtoblockchain/", views.sendtoblockchain, name="sendtoblockchain"),
-    path("fetchbypincode/", views.fetchbypincode, name="fetchbypincode"),
-    path('rasa/', views.Rasa)
+    path("fetchpincode/", views.fetchpincode, name="fetchbypincode"),
+    path('rasa/', views.Rasa),
+    path('phone/', views.Phone),
+
 
 ]

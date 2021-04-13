@@ -76,10 +76,7 @@ stories:
   # - action: utter_taken_crime_type
   - action: utter_ask_accident_vehicle_type
   - intent: details_vehicle_type
-    entities:
-    - vehicle_type: "truck"
-  - slot_was_set:
-      - vehicle_type: "truck"
+  - action: utter_ask_accident_number_of_death
   # - action: utter_ask_accident_number_of_people
   # - intent: details_number_of_people
   #   entities:
@@ -93,7 +90,7 @@ stories:
   - action: accident_details_form
   - active_loop: accident_details_form
   - active_loop: null
-  - action: utter_submit_with_basic_user_details
+  # - action: utter_submit_with_basic_user_details
   - action: action_submit_data
 
 #********************************************************************************************************************************

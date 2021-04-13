@@ -29,7 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SESSION_ID=0
+
 # Application definition
 
 INSTALLED_APPS = [

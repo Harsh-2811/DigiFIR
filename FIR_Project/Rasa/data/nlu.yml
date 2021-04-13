@@ -82,9 +82,11 @@ nlu:
 - intent: crime_date_list
   examples: |
     - today's date is [6 March 2021](crime_date)
+    - today's date is [7 April 2021](crime_date)
     - crime date is [5 March  2021](crime_date)
     - date of crime is [14 February 2021](crime_date)
     - [6 March 2021](crime_date)
+    - [7 April 2021](crime_date)
     - [2/5/2020](crime_date)
 
 - intent: crime_time_list
@@ -124,12 +126,14 @@ nlu:
   examples: |
     - [Hirabag](crime_location)
     - [Kapodara](crime_location)
-    - [Katargaam](crime_location)
+    - [Katargam](crime_location)
+    - [Ambatalavadi](crime_location)
+    - [Dabholi](crime_location)
     - [Adajan](crime_location)
     - [Vesu](crime_location)
     - the crime happened at [Hirabag](crime_location)
     - crime location [Kapodara](crime_location)
-    - crime was at [Katargaam](crime_location)
+    - crime was at [Katargam](crime_location)
     - crime was at [Kapodara](crime_location)
     - I was at [Kapodara](crime_location)
     - near [ICICI bank Vesu](crime_location)
@@ -368,3 +372,13 @@ nlu:
 #     - [diamonds](ransom_demand)
 #     - [locker key](ransom_demand)
 #     - [property papers](ransom_demand)
+
+- intent: out_of_scope
+  examples: |
+    - I want to order food
+    - What is 2 + 2?
+    - Who's the US President?
+    - I do not know
+    - hows the weather
+    - I love you
+    - I will not tell you

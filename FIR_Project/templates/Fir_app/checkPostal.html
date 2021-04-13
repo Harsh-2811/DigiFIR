@@ -1,0 +1,29 @@
+{% extends 'Fir_app/basic.html' %}
+
+{% load static %}
+
+
+{% block body %}
+
+<p id="postal"></p>
+{% endblock %}
+
+{% block script %}
+$.ajax('/fetchpincode/', {
+
+    type: 'POST',  // http method
+    data : {
+        place : "Hirabag"
+    },
+    success: function (data, status, xhr) {
+       console.log(data);
+       data = JSON.parse(data);
+
+       $("#postal").val(data.sho)
+
+    },
+    error: function (jqXhr, textStatus, errorMessage) {
+            alert(errorMessage);
+    }
+    });
+{% endblock%}
