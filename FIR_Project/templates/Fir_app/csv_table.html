@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table id="table" border="1px solid black" cellpadding="10s" cellspacing="0">
+  <thead>
+    <tr>
+      {% for header in headers %}
+      <th>{{ header }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in data %}
+    <tr>
+
+      <td>{{ row.Id }}</td>
+      <td>{{ row.State }}</td>
+      <td>{{ row.Capital }}</td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</body>
+</html>

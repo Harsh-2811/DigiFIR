@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+  <div class="chat-container" style="color:red"></div>
+  <div class="mt-3 display-flex justify-center text-center">
+      <h2>Please Click Below button after confirmation message from Chatbot, to check data in Form </h2>
+    <button class="btn btn-success" id="save">See Data in Form</button>
+  </div>
+
+  <script src="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.js"/></script>
+
+  <script type="text/javascript">
+    var chatroom = new window.Chatroom({
+      host: "http://localhost:5005",
+      title: "DigiFIR FIR Inquiry",
+      container: document.querySelector(".chat-container"),
+      welcomeMessage: "Hi {{request.user}}, To Register FIR type or speak FIR ",
+      speechRecognition: "en-IN",
+      voiceLang: "en-IN"
+    });
+    chatroom.openChat();
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  var  pincode = "";
+function getaddress(){
+
+var platform = new H.service.Platform({
+"apikey": "CKrurbxpWPpSbO_8vyz21R3F2IGmGxl_GHo-ZxscqSI"
+});
+var geocoder = platform.getSearchService();
+if(navigator.geolocation) {
+navigator.geolocation.getCurrentPosition(position => {
+    geocoder.reverseGeocode(
+        {
+            limit: 1,
+            at: position.coords.latitude + "," + position.coords.longitude
+        }, data => {
+            console.log(data.items[0]);
+            pincode= data.items[0].address.postalCode;
+            console.log(pincode)
+
+        }, error => {
+            console.error(error);
+        }
+    );
+});
+} else {
+console.error("Geolocation is not supported by this browser!");
+}
+}
+getaddress();
+
+  function remove_array_element(array, n)
+ {
+   var index = array.indexOf(n);
+   if (index > -1) {
+    array.splice(index, 1);
+}
+   return array;
+ }
+
+  var fir_value = [];
+  var fir_key = [];
+
+  $("#save").click(function(){
+
+    $(".chat.right").each(function(){
+        var element = $(this).children();
+        
+        fir_value.push(element.children().text());
+       
+    });
+    $(".chat.left").each(function(){
+        var element = $(this).children();
+        
+        fir_key.push(element.children().text());
+       
+    });
+
+    var final_data = fir_key.pop();
+    var data_array = JSON.stringify(final_data);
+    //console.log(data_array)
+    fir_key.shift();
+    fir_value.shift();
+    /*states = ["gujarat","maharastra","rajasthan"]
+    city = ["surat","rajkot","mumbai","pune"]
+    for(var i=0;i<states.length;i++)
+    {
+      if(status[i] != toString(fir_value[3]).toLowerCase()){
+          for(var j=0;j<city/length;j++){
+            if(city[j] != toString(fir_value[5]).toLowerCase() ){
+              remove_array_element(fir_value,3);
+              remove_array_element(fir_value,4);
+
+            }
+          }
+      }
+    }*/
+    if(fir_key.indexOf("Wrong Input.") > -1 ){
+      fir_key.splice("Wrong Input.",1)
+    }
+    if(fir_key.indexOf("I am sorry! But I didn't catch that. Please say it again.") > -1){
+      fir_key.splice("I am sorry! But I didn't catch that. Please say it again.",1)
+    }
+
+    console.log(fir_value);
+    console.log(fir_key);
+   // console.log(final_data);
+
+
+
+
+    var final_fir={}
+    if(fir_key.length == fir_value.length){
+        for(var k=0;k<fir_key.length;k++){
+          final_fir[fir_key[k]] = fir_value[k];
+        }
+    }
+
+    final_fir["pincode"] = pincode;
+    console.log(final_fir);
+    localStorage.setItem('fir',JSON.stringify(final_fir));
+    console.log(localStorage.getItem('fir'))
+    window.location.href = "/firform";
+  });
+</script> 
+
+</body>
+</html>
